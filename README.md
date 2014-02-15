@@ -74,7 +74,8 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 
 +	object 的项目名可随意更改.
 
-5. plugins
+5.plugins
+
 可以这样导入server扩展,
 
 	with open('./plus/get_info.py') as files: exec files.read()
