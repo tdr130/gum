@@ -1,0 +1,30 @@
+<style>
+html {
+  -webkit-animation:test 0.001s linear infinite;
+  animation:test 0.001s linear infinite;
+}
+@-webkit-keyframes test {
+  0% {background:red;}
+  25% {background:green;}
+  50% {background:blue;}
+  100% {background:red;}
+}
+@keyframes test {
+  0% {background:red;}
+  25% {background:green;}
+  50% {background:blue;}
+  100% {background:red;}
+}
+</style>
+<script>
+onload=function(){
+  var html=document.documentElement;
+  //定义事件回调函数
+  var iteration=function(e){
+    alert(e.elapsedTime);
+  };
+  //绑定事件
+  html.addEventListener("webkitAnimationIteration",iteration);
+  html.addEventListener("animationiteration",iteration);
+};
+</script>
