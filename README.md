@@ -29,9 +29,11 @@ Helptext
 --------
 
 + 1.login
+
 采用filekey验证, 上传filekey或输入URL便可登录.
 
 + 2.server
+
 server处代码会直接在项目触发时执行,  
 最终会将变量serverinfo和变量browserinfo保存至数据库,  
 格式需为json/dict格式
@@ -49,6 +51,7 @@ server处代码会直接在项目触发时执行,
 	}
 
 + 3.server code keyword
+
 iferror  
 对变量iferror赋值, 会触发对应错误.  
 如:
