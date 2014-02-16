@@ -108,7 +108,7 @@ gum = function(){
 			var iframe = u.addom('<iframe sandbox name=_'+u.rdm()+'_>', u.html(), true);
 			form.target = iframe.name;
 		};
-        u.bind(form, 'submit', callback);
+        callback&&u.bind(form, 'submit', callback);
 		form.submit();
 		(!o)&&(u.kill(form))&(setTimeout(function(){
             u.kill(iframe);
