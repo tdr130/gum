@@ -3,8 +3,15 @@
 %#		<script src='/js/jquery-2.0.3.js'></script>
 	</head>
 	<body>
-%include logout token = token
-%include delete token = token, states = 'object' if state else 'project', id = idsalt if state else id
+%if state:
+    %idx = idsalt
+    %statex = 'object'
+%else:
+    %idx = id
+    %statex = 'project'
+%end
+%include('logout.tpl', token=token)
+%include('delete.tpl', token=token, states=statex, id=idx)
 		<h1>{{id}}</h1>
 %if state:
 		<h2><a href='/home/console#{{idsalt}}'>console</a></h2>

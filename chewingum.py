@@ -47,9 +47,12 @@ def getoken():
     response.set_cookie('token', token, path='/home')
     return token
 
+def setheader():
+    response.set_header('X-Frame-Options', 'deny')
+
 def validate(types):
     if types == 'login':
-        response.set_header('X-Frame-Options', 'deny')
+        setheader()
         login_key = request.get_cookie('key')
         if login_key:
             ausers.execute("select cookie from user where id=1")
@@ -71,6 +74,7 @@ def send_static(filename):
 @error(405)
 @error(500)
 def errors(gumerror):
+    setheader()
     return template('errors',
             error = gumerror.status[:3],
             ctime = ctime())

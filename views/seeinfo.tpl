@@ -2,8 +2,8 @@
 <html>
 	<head></head>
 	<body>
-%include logout token=token
-%include delete states=states, id=ids, token=token
+%include('logout.tpl', token=token)
+%include('delete.tpl', states=states, id=ids, token=token)
 		<a href='/home/object/{{idsalt}}'><h1>object</h1></a>
 		<br><b>Sever info:</b><br>
 %for http in serverinfo:

@@ -2,7 +2,7 @@
 	<head>
 	</head>
 	<body>
-%include logout token=token
+%include('logout.tpl', token=token)
 		<h2><a href='/home/project/{{new}}'>new</a></h2>
 		project
 %for project in projects:
