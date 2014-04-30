@@ -32,18 +32,18 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="chewingum-alpha02011140429" class="anchor" href="#chewingum-alpha02011140429"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.201][1140429]</h1>
+<a name="chewingum-alpha02021140430" class="anchor" href="#chewingum-alpha02021140430"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.202][1140430]</h1>
 
 <h2>
 <a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>Name</h2>
 
-<p><strong>chewingum - individual XSS server</strong></p>
+<p><strong>chewingum - individual XSS Server</strong></p>
 
 <h2>
 <a name="startup" class="anchor" href="#startup"><span class="octicon octicon-link"></span></a>Startup</h2>
 
 <pre><code>python ./config.py install [ domain salt filekeyPath | -h ]
-python ./chewingum.py [ -h | host port debug ]
+python ./chewingum.py [ host port debug | -h ]
 </code></pre>
 
 <h2>
@@ -102,25 +102,22 @@ browserinfo = {
 对变量iferror赋值, 会触发对应错误.<br>
 如:</p>
 
-<blockquote>
-<p>iferror = 404</p>
-</blockquote>
+<pre><code>iferror = 404
+</code></pre>
 
 <p>returns<br>
 对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.<br>
 如:</p>
 
-<blockquote>
-<p>returns = ''</p>
-</blockquote>
+<pre><code>returns = '&lt;script&gt;alert(1)&lt;/script&gt;'
+</code></pre>
 
 <p>gum.backinfo<br>
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。<br>
 当返回之后最好清空它。</p>
 
-<blockquote>
-<p>gum.backinfo = {};</p>
-</blockquote>
+<pre><code>gum.backinfo = {};
+</code></pre>
 
 <p><em>4.project name and object name</em></p>
 
@@ -141,9 +138,11 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 
 <pre><code>from plus.email_remind import send_mail
 send_mail(gum_emailremind)
-
-具体看扩展的写法
 </code></pre>
+
+<blockquote>
+<p>具体看扩展的写法</p>
+</blockquote>
 
 <p>可以这样导入browser插件,</p>
 
@@ -190,9 +189,11 @@ sessionid[referer][1]['cookie'] = info_cookie
 browserinfo = b64encode(sessionid.get(referer))
 </code></pre>
 
-<ul>
-<li>      不推荐使用多次接收，默认已关闭。</li>
-</ul><p><em>7.other</em></p>
+<blockquote>
+<p>不推荐使用多次接收，默认已关闭。</p>
+</blockquote>
+
+<p><em>7.other</em></p>
 
 <p>使用基本探针:</p>
 
@@ -216,7 +217,9 @@ browserinfo = b64encode(sessionid.get(referer))
 <pre><code>./static/plus/onexsshell.js
 </code></pre>
 
+<blockquote>
 <p>尚在测试阶段。</p>
+</blockquote>
 
 <p><em>9.browser trojan</em></p>
 
@@ -225,8 +228,9 @@ browserinfo = b64encode(sessionid.get(referer))
 使用chrome or chromium打包<br>
 安装在目标的浏览器后，使用console即可操作目标浏览器。  </p>
 
-<pre><code>尚在测试阶段
-</code></pre>
+<blockquote>
+<p>尚在测试阶段</p>
+</blockquote>
       </section>
     </div>
 
