@@ -408,7 +408,7 @@ def main(host, port, debug):
     run(host=host, port=port, debug=debug, server=GeventWebSocketServer)
 
 if __name__ == '__main__':
-    if len(argv) >= 1 or ('-h' in argv) or ('--help' in argv):
+    if len(argv) <= 1 or ('-h' in argv) or ('--help' in argv):
         print b64decode(b64encode('ChewinGum'))
         print '''
 usage:
