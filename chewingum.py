@@ -336,6 +336,7 @@ def ing():
         except Exception, e:
             print 'ConfigError: server code error.'
             print e
+            serverinfo['SERVER_CODE_ERROR'] = e
     if not updates:
 #        infoid = gums.execute("select id from info where upkey=?",
 #                ['yes']).fetchone()[0]
@@ -375,16 +376,23 @@ def connect(ws):
         consoles[idsalt] = ws
     else:
         puppets[idsalt] = ws
+        gum.update('object', {'life':ctime()}, {'idsalt':idsalt})
+        gum.commit()
     while True:
         try:
             cmdinfo = ws.receive()
-        except:
+        except Exception, e:
+            print e
             break
         if cmdinfo is not None:
-            if lineor:
-                puppets[idsalt].send(cmdinfo)
-            else:
-                consoles[idsalt].send(escape(cmdinfo))
+            try:
+                if lineor:
+                    puppets[idsalt].send(cmdinfo)
+                else:
+                    consoles[idsalt].send(escape(cmdinfo))
+            except KeyError, e:
+                consoles[idsalt].send(
+                    escape('No User, {error}'.forma(error=e)))
         else: break
     if lineor:
         del consoles[idsalt]
@@ -400,11 +408,11 @@ def main(host, port, debug):
     run(host=host, port=port, debug=debug, server=GeventWebSocketServer)
 
 if __name__ == '__main__':
-    if len(argv) > 4 or '-h' in argv or '--help' in argv:
-        print b64decode(b64encode('Chewingum'))
+    if len(argv) >= 1 or ('-h' in argv) or ('--help' in argv):
+        print b64decode(b64encode('ChewinGum'))
         print '''
 usage:
-	python ./chewingum.py [host] [port] [debug]
+	python ./chewingum.py [ -h | host port debug ]
 
 	-h --help
 '''

@@ -1,13 +1,13 @@
-# Chewingum [alpha][0.201][1140429]
+# Chewingum [alpha][0.202][1140430]
 
 Name
 ----
-**chewingum - individual XSS server**
+**chewingum - individual XSS Server**
 
 Startup
 -------
     python ./config.py install [ domain salt filekeyPath | -h ]
-    python ./chewingum.py [ -h | host port debug ]
+    python ./chewingum.py [ host port debug | -h ]
 
 Dependencies
 ------------
@@ -55,17 +55,20 @@ server处代码会直接在项目触发时执行,
 iferror  
 对变量iferror赋值, 会触发对应错误.  
 如:
->	iferror = 404
+
+	iferror = 404
 
 returns  
 对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.  
 如:
->	returns = '<script>alert(1)</script>'
+
+	returns = '<script>alert(1)</script>'
 
 gum.backinfo  
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。  
 当返回之后最好清空它。
->   gum.backinfo = {};
+
+    gum.backinfo = {};
 
 *4.project name and object name*
 
@@ -85,7 +88,7 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
     from plus.email_remind import send_mail
     send_mail(gum_emailremind)
 
-    具体看扩展的写法
+>    具体看扩展的写法
 
 可以这样导入browser插件,
 
@@ -127,7 +130,7 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 	sessionid[referer][1]['cookie'] = info_cookie
 	browserinfo = b64encode(sessionid.get(referer))
 
-+		不推荐使用多次接收，默认已关闭。
+>	不推荐使用多次接收，默认已关闭。
 
 *7.other*
 
@@ -150,7 +153,7 @@ javascript文件在
 
     ./static/plus/onexsshell.js
 
-尚在测试阶段。
+>    尚在测试阶段。
 
 *9.browser trojan*
 
@@ -159,4 +162,4 @@ chrome
 使用chrome or chromium打包  
 安装在目标的浏览器后，使用console即可操作目标浏览器。  
 
-    尚在测试阶段
+>    尚在测试阶段
