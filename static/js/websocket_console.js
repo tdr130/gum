@@ -11,11 +11,11 @@ $(document).ready(function(){
         $('#messages').append('<li>Connected to success.</li>');
     };
     ws.onmessage = function(info){
-        $('#messages').append(':'+info.data+'<br>');
+        $('#messages').append(':' + info.data);
     };
     $('#send').submit(function(){
         ws.send($('#command').val());
-        $('#messages').append($('#command').val()+'<br>')
+        $('#messages').append('<p>' + $('#command').val().replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>')
         $('#command').val('').focus();
         return false;
     });
