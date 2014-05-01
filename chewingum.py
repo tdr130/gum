@@ -376,8 +376,8 @@ def connect(ws):
         consoles[idsalt] = ws
     else:
         puppets[idsalt] = ws
-        gum.update('object', {'life':ctime()}, {'idsalt':idsalt})
-        gum.commit()
+#        gum.update('object', {'life':ctime()}, {'idsalt':idsalt})
+#        gum.commit()
     while True:
         try:
             cmdinfo = ws.receive()

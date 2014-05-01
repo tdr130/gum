@@ -1,6 +1,6 @@
 gum = function(){
 	var u = {
-		'version':'1140213',
+		'version':'1140501',
 		'domain':'{{domain}}',
 	    'backinfo':{}
     };
@@ -62,20 +62,22 @@ gum = function(){
 		if(u.jquery()){
 			$.getScript(url, callback);
 		}else{
-			document.documentElement.appendChild(scripts = document.createElement('script')).src=url;
+            urlx = url + '?_=' + u.rdm();
+			document.documentElement.appendChild(scripts = document.createElement('script')).src=urlx;
             callback&&u.bind(scripts, 'load', callback);
             u.kill(scripts);
 		};
 	};
 
-	u.ajax = function(urls, datas, callback){
+	u.ajax = function(url, datas, headers, callback){
         var xhr;
-        datas?(types = 'POST'):(types = 'GET');
+        data?(type = 'POST'):(type = 'GET');
 		if(u.jquery()){
 			xhr = $.ajax({
-                type:types,
-                url:urls,
+                type:type,
+                url:url,
                 data:datas,
+                headers:headers,
                 success:callback
             });
 			return xhr;
@@ -85,8 +87,13 @@ gum = function(){
 			}else{
 				xhr = new ActiveXObject('Microsoft.XMLHTTP');
 			};
-			xhr.open(types,urls,false);
-			if(types=='POST'){xhr.setRequestHeader('content-type','application/x-www-form-urlencoded')};
+			xhr.open(type, url, false);
+			if(type=='POST'){xhr.setRequestHeader('content-type','application/x-www-form-urlencoded')};
+            if(headers){
+                for(var header in headers){
+                    xhr.setRequestHeader(header, headers[header]);
+                };
+            };
             callback&&(xhr.onreadystatechange = function(){
                 (this.readyState == 4 && ((this.status >= 200 && this.status <= 300) || this.status == 304))&&callback.apply(this, arguments);
             });
