@@ -11,16 +11,16 @@ gum = function(){
 		if(u.e('$().jquery')){return 1}else{return 0};
 	};
 
-	u.id = function(ids){
+	u.id = function(id){
 		if(u.jquery()){
-			return $('#'+ids);
+			return $('#'+id);
 		}else{
-			return document.getElementById(ids);
+			return document.getElementById(id);
 		};
 	};
 
-	u.name = function(names){
-		return document.getElementsByTagName(names);
+	u.name = function(name){
+		return document.getElementsByTagName(name);
 	};
 
     u.html = function(){
@@ -31,19 +31,19 @@ gum = function(){
 
 	u.rdm = function(){return Math.random()*1e5};
 
-    u.bind = function(e, name, fn){
+    u.bind = function(e, name, foo){
         if(u.jquery()){
-            $(e).bind(name, fn);
+            $(e).bind(name, foo);
         }else{
-            e.addEventListener?e.addEventListener(name, fn, false):e.attachEvent('on'+name, fn);
+            e.addEventListener?e.addEventListener(name, foo, false):e.attachEvent('on'+name, foo);
         };
     };
 
-    u.kill = function(doms){
+    u.kill = function(dom){
             if(u.jquery()){
-                    $(doms).remove();
+                    $(dom).remove();
             }else{
-                    doms.parentElement.removeChild(doms);
+                    dom.parentElement.removeChild(dom);
             };
     };
 
@@ -51,27 +51,28 @@ gum = function(){
         (!doming)&&(doming = u.html());
         var temp = document.createElement('span');
         temp.innerHTML = html;
-        var doms = temp.children[0];
-        (hide)&&(doms.style.display = 'none');
-        callback&&u.bind(doms, 'load', callback)
-        doming.appendChild(doms);
-        return doms;
+        var dom = temp.children[0];
+        (hide)&&(dom.style.display = 'none');
+        callback&&u.bind(dom, 'load', callback);
+        doming.appendChild(dom);
+        return dom;
     };
 
 	u.script = function(url, callback){
 		if(u.jquery()){
 			$.getScript(url, callback);
 		}else{
-            urlx = url + '?_=' + u.rdm();
-			document.documentElement.appendChild(scripts = document.createElement('script')).src=urlx;
-            callback&&u.bind(scripts, 'load', callback);
-            u.kill(scripts);
+            url += '?_=' + u.rdm();
+			document.documentElement.appendChild(
+                script = document.createElement('script')).src=url;
+            callback&&u.bind(script, 'load', callback);
+            u.kill(script);
 		};
 	};
 
 	u.ajax = function(url, datas, headers, callback){
         var xhr;
-        data?(type = 'POST'):(type = 'GET');
+        datas?(type = 'POST'):(type = 'GET');
 		if(u.jquery()){
 			xhr = $.ajax({
                 type:type,
@@ -82,20 +83,23 @@ gum = function(){
             });
 			return xhr;
 		}else{
-			if(window.XMLHttpRequest){
-				xhr = new XMLHttpRequest();
-			}else{
-				xhr = new ActiveXObject('Microsoft.XMLHTTP');
-			};
+			(window.XMLHttpRequest)?(
+                xhr = new XMLHttpRequest()):(
+                xhr = new ActiveXObject('Microsoft.XMLHTTP'));
 			xhr.open(type, url, false);
-			if(type=='POST'){xhr.setRequestHeader('content-type','application/x-www-form-urlencoded')};
+			(type=='POST')&&(
+                xhr.setRequestHeader('content-type',
+                                     'application/x-www-form-urlencoded'));
             if(headers){
                 for(var header in headers){
                     xhr.setRequestHeader(header, headers[header]);
                 };
             };
             callback&&(xhr.onreadystatechange = function(){
-                (this.readyState == 4 && ((this.status >= 200 && this.status <= 300) || this.status == 304))&&callback.apply(this, arguments);
+                (this.readyState == 4 && (
+                    (this.status >= 200 && this.status <= 300)
+                        || this.status == 304)
+                )&&callback.apply(this, arguments);
             });
 			xhr.send(datas);
 			return xhr;
