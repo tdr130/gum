@@ -6,6 +6,8 @@ from sys import argv
 from cgi import escape
 from time import ctime
 from hashlib import md5
+#from os.path import isfile
+#from os import listdir, remove
 from data.libdbs import sqlitei
 from bottle.ext.websocket import websocket, GeventWebSocketServer
 #from beaker.middleware import SessionMiddleware as sessionm
@@ -142,17 +144,17 @@ def login_rekey():
     else:
         redirect(referer)
     ausers.execute("select key from user where id=1")
-    keys = getmd5(b64encode(key))
+    keys = getmd5(b64encode(key) + salt)
     akeys = ausers.fetchone()[0]
     if keys != akeys:
-        if not rekey:
-            redirect(referer)
-        else:
+        if rekey:
             ausers.execute("update user set key=? where id=1",
                     [keys])
+        else:
+            redirect(referer)
     else:
         ausers.execute("select id,domain,salt,key from user where id=1")
-        keyhash = getmd5(str(ausers.fetchone()) + ctime())
+        keyhash = getmd5(b64encode(str(ausers.fetchone()) + ctime()))
         ausers.execute("update user set cookie=? where id=1", [keyhash])
         response.set_cookie('key', keyhash, httponly = True,
                 max_age = 604800, path = '/home')
@@ -288,6 +290,22 @@ def deletes(state, ids):
         gum.commit()
     redirect('/home')
 
+@get('/home/plus')
+def plus_list():
+    if validate('login'):
+        abort(404)
+    return template('plus', token=getoken())
+#    dirpath = request.query.ls if request.query.ls else './static/'
+#    template('plus',lsdir = listdir(dirpath))
+
+@post('/home/plus/up')
+def plus_up():
+    if validate('login') or validate('token'):
+        abort(404)
+    upload = request.files.get('plus')
+    upload.save(request.forms.get('path') + upload.filename)
+    redirect('/home/plus')
+
 @get('/ing')
 @post('/ing')
 def ing():
@@ -412,7 +430,7 @@ if __name__ == '__main__':
         print b64decode(b64encode('ChewinGum'))
         print '''
 usage:
-	python ./chewingum.py [ -h | host port debug ]
+	python ./chewingum.py [ host port debug | -h ]
 
 	-h --help
 '''

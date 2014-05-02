@@ -3,7 +3,7 @@
 	</head>
 	<body>
 %include('logout.tpl', token=token)
-		<h2><a href='/home/project/{{new}}'>new</a></h2>
+		<h2><a href='/home/project/{{new}}'>NewProject</a></h2>
 		project
 %for project in projects:
     %if project[-1] != 'yes':
@@ -17,6 +17,8 @@
 		<a href='/home/object/{{object[0]}}'>{{object[1]}}</a>
     %end
 %end
-		<br><br><a href='/home/rekey'>setkey</a>
+		<br>
+        <p><a href='/home/rekey'>Setkey</a></p>
+        <p><a href='/home/plus'>Upload</a></p>
 	</body>
 </html>
