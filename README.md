@@ -1,12 +1,12 @@
-# Chewingum [alpha][0.203][1140502]
+# ChewinGum [alpha][0.2034][1140504]
 
 Name
 ----
-***chewingum - individual XSS Server***
+***ChewinGum - individual XSS Server***
 
 Startup
 -------
-    python ./config.py install [ domain salt filekeyPath | -h ]
+    python ./config.py install [ salt filekeyPath | -h ]
     python ./chewingum.py [ host port debug | -h ]
 
 Dependencies
@@ -54,11 +54,11 @@ server处代码会直接在项目触发时执行,
 
 **3.Server code keyword**
 
-iferror  
-对变量iferror赋值, 会触发对应错误.  
+ifstatus  
+对变量ifstatus赋值, 会触发对应status.  
 如:
 
-	iferror = 404
+	ifstatus = 404
 
 returns  
 对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.  

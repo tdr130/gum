@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # encoding=utf-8
 
+#from __future__ import unicode_literals
+
 import sqlite3
 from sys import argv
 from cgi import escape
@@ -18,7 +20,7 @@ from json import dumps, loads
 from random import random
 from bottle import route, error, get, post,\
 	static_file, request, template,\
-	response, redirect, abort, run#, app
+	response, redirect, abort, run, app
 
 #	sqlite sqldb
 auser = sqlite3.connect('./data/auser.db')
@@ -27,8 +29,8 @@ ausers = auser.cursor()
 #gums = gum.cursor()
 gum = sqlitei('./data/gum.db')
 
-ausers.execute("select domain, salt from user where id=1")
-domain, salt = ausers.fetchone()
+ausers.execute("select salt from user where id=1")
+salt = ausers.fetchone()[-1]
 '''
 #	session
 session_opt = {
@@ -85,6 +87,7 @@ def errors(gumerror):
 @post('/')
 def gumjs():
     projects = None
+    domain = request.headers.get('Host')
     response.set_header('Content-Type', 'application/javascript')
     referer = request.headers.get('Referer')
     idsalt = request.get_cookie('gum')
@@ -153,7 +156,7 @@ def login_rekey():
         else:
             redirect(referer)
     else:
-        ausers.execute("select id,domain,salt,key from user where id=1")
+        ausers.execute("select id,salt,key from user where id=1")
         keyhash = getmd5(b64encode(str(ausers.fetchone()) + ctime()))
         ausers.execute("update user set cookie=? where id=1", [keyhash])
         response.set_cookie('key', keyhash, httponly = True,
@@ -312,7 +315,7 @@ def ing():
     projects = server = updates = None
     serverinfo = {}
     browserinfo = {}
-    iferror = returns = ''
+    ifstatus = returns = ''
     idsalt = request.get_cookie('gum')
     referer = request.headers.get('Referer')
 #    sessionid = request.environ.get('beaker.session')
@@ -372,8 +375,8 @@ def ing():
     gum.update('object', {'life':ctime()}, {'idsalt':idsalt})
 #    sessionid.save()
     gum.commit()
-    if iferror:
-        abort(iferror)
+    if ifstatus:
+        abort(ifstatus)
     return returns
 
 consoles = {}
@@ -410,7 +413,7 @@ def connect(ws):
                     consoles[idsalt].send(escape(cmdinfo))
             except KeyError, e:
                 consoles[idsalt].send(
-                    escape('No User, {error}'.forma(error=e)))
+                    escape('No User, {error}'.format(error=e)))
         else: break
     if lineor:
         del consoles[idsalt]
@@ -419,6 +422,7 @@ def connect(ws):
 
 @get('/home/console')
 def console():
+    domain = request.headers.get('Host')
     return template('console', domain=domain)
 
 def main(host, port, debug):
@@ -439,3 +443,5 @@ usage:
         port = (argv[2] if argv[2] else '80') if len(argv) > 2 else '80'
         debug = (True) if len(argv) > 3 else False
         main(host, port, debug)
+
+application = app()

@@ -1,5 +1,7 @@
 #! /usr/bin/env python
-# coding=utf-8
+# encoding=utf-8
+
+#from __future__ import unicode_literals
 
 import sqlite3
 from hashlib import md5
@@ -7,10 +9,9 @@ from base64 import b64encode
 from sys import argv
 
 salt = 'chewingum'
-domain = 'localhost'
 filekey = './filekey'
 
-def install(domains, salts, filekeys):
+def install(salt, filekey):
     hashs = md5()
     with open(filekey) as keyfile:
         hashs.update(b64encode(keyfile.read()))
@@ -20,14 +21,13 @@ def install(domains, salts, filekeys):
     auser.execute('''
 	create table user(
 		id,
-		domain,
 		salt,
 		key,
 		cookie
 	);
 ''')
-    ausers.execute('insert into user (id, domain, salt, key) values (?,?,?,?)',
-	[1, domains, salts, key])
+    ausers.execute('insert into user (id, salt, key) values (?,?,?,?)',
+	[1, salt, key])
     auser.commit()
     auser.close()
 
@@ -74,13 +74,13 @@ if __name__ == '__main__':
     if '-h' in argv or '--help' in argv or len(argv) in (1, 3, 4):
         print '''
 usage:
-	python config.py install [domain salt filekeyPath]
+	python config.py install [ salt filekeyPath]
 
 	-h --help
 '''
         exit()
     elif 'install' in argv:
         if len(argv) == 5:
-            install(argv[2], argv[3], argv[4])
+            install(argv[2], argv[3])
         else:
-            install(domain, salt, filekey)
+            install(salt, filekey)
