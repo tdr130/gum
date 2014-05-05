@@ -13,9 +13,9 @@ filekey = './filekey'
 
 def install(salt, filekey):
     hashs = md5()
-    with open(filekey) as keyfile:
-        hashs.update(b64encode(keyfile.read()))
-        key = hashs.hexdigest()
+    with open(filekey) as keyfile: keyread = keyfile.read()
+    hashs.update(b64encode(keyread) + salt)
+    key = hashs.hexdigest()
     auser = sqlite3.connect('./data/auser.db')
     ausers = auser.cursor()
     auser.execute('''
@@ -26,7 +26,7 @@ def install(salt, filekey):
 		cookie
 	);
 ''')
-    ausers.execute('insert into user (id, salt, key) values (?,?,?,?)',
+    ausers.execute('insert into user (id, salt, key) values (?,?,?)',
 	[1, salt, key])
     auser.commit()
     auser.close()
@@ -71,7 +71,7 @@ def install(salt, filekey):
     gum.close()
 
 if __name__ == '__main__':
-    if '-h' in argv or '--help' in argv or len(argv) in (1, 3, 4):
+    if '-h' in argv or '--help' in argv or len(argv) in (1, 3):
         print '''
 usage:
 	python config.py install [ salt filekeyPath]
@@ -80,7 +80,7 @@ usage:
 '''
         exit()
     elif 'install' in argv:
-        if len(argv) == 5:
+        if len(argv) == 4:
             install(argv[2], argv[3])
         else:
             install(salt, filekey)
