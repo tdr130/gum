@@ -4,6 +4,7 @@
 #from __future__ import unicode_literals
 
 import sqlite3
+from time import time
 from hashlib import md5
 from base64 import b64encode
 from sys import argv
@@ -27,7 +28,9 @@ def install(salt, filekey):
 	);
 ''')
     ausers.execute('insert into user (id, salt, key) values (?,?,?)',
-	[1, salt, key])
+            [1, salt, key])
+    ausers.execute('insert into user (id, salt, key) values (?,?,?)',
+            [2, 0, time()])
     auser.commit()
     auser.close()
 

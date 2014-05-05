@@ -6,11 +6,11 @@
 import sqlite3
 from sys import argv
 from cgi import escape
-from time import ctime
 from hashlib import md5
 #from os.path import isfile
 #from os import listdir, remove
 from data.libdbs import sqlitei
+from time import time, ctime, strftime, localtime
 from bottle.ext.websocket import websocket, GeventWebSocketServer
 #from beaker.middleware import SessionMiddleware as sessionm
 from httplib import HTTPConnection as httpconn
@@ -137,6 +137,13 @@ def login_rekey():
     if filekey:
         key = filekey.file.read()
     elif urlkey:
+        itime = strftime('%y%m%d%H', localtime(time()))
+        ausers.execute('select key from user where id=2')
+        if itime == ausers.fetchone()[-1]:
+            ausers.execute('updata user set key=? where id=2',
+                    [itime])
+            auser.commit()
+            redirect(referer)
         try:
             keyurl = urlparse(urlkey)
             httpkey = httpconn(keyurl.netloc)
@@ -376,7 +383,7 @@ def ing():
 #    sessionid.save()
     gum.commit()
     if ifstatus:
-        abort(ifstatus)
+        abort(ifstatus, returns)
     return returns
 
 consoles = {}

