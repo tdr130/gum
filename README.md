@@ -1,4 +1,4 @@
-# ChewinGum [alpha][0.2034][1140504]
+# ChewinGum [alpha][0.20345][1140505]
 
 Name
 ----
@@ -26,6 +26,7 @@ Reference
 * (get_info.js) - [BeEF](http://beefproject.com/)
 * (wec_cssbug.html) - [CSS3事件的消息回调BUG](http://www.web-tinker.com/article/20339.html)
 * (get_networkip.js) - [Network IP Address via ipcalf.com](http://net.ipcalf.com/)
+* (tool_keylogger.js) - [XSS keylogger](http://wiremask.eu/xss-keylogger/)
 
 Helptext
 --------
