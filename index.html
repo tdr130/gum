@@ -32,17 +32,17 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="chewingum-alpha02031140502" class="anchor" href="#chewingum-alpha02031140502"><span class="octicon octicon-link"></span></a>Chewingum [alpha][0.203][1140502]</h1>
+<a name="chewingum-alpha020341140504" class="anchor" href="#chewingum-alpha020341140504"><span class="octicon octicon-link"></span></a>ChewinGum [alpha][0.2034][1140504]</h1>
 
 <h2>
 <a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>Name</h2>
 
-<p><strong><em>chewingum - individual XSS Server</em></strong></p>
+<p><strong><em>ChewinGum - individual XSS Server</em></strong></p>
 
 <h2>
 <a name="startup" class="anchor" href="#startup"><span class="octicon octicon-link"></span></a>Startup</h2>
 
-<pre><code>python ./config.py install [ domain salt filekeyPath | -h ]
+<pre><code>python ./config.py install [ salt filekeyPath | -h ]
 python ./chewingum.py [ host port debug | -h ]
 </code></pre>
 
@@ -103,11 +103,11 @@ browserinfo = {
 
 <p><strong>3.Server code keyword</strong></p>
 
-<p>iferror<br>
-对变量iferror赋值, 会触发对应错误.<br>
+<p>ifstatus<br>
+对变量ifstatus赋值, 会触发对应status.<br>
 如:</p>
 
-<pre><code>iferror = 404
+<pre><code>ifstatus = 404
 </code></pre>
 
 <p>returns<br>
