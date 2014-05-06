@@ -29,8 +29,8 @@ def install(salt, filekey):
 ''')
     ausers.execute('insert into user (id, salt, key) values (?,?,?)',
             [1, salt, key])
-    ausers.execute('insert into user (id, salt, key) values (?,?,?)',
-            [2, 0, time()])
+    ausers.execute('insert into user (id, key) values (?,?)',
+            [2, time()])
     auser.commit()
     auser.close()
 

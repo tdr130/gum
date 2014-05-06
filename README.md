@@ -20,10 +20,10 @@ Dependencies
 
 Reference
 ---------
-* Gum.js - [xss.js](http://zone.wooyun.org/content/2113)
-* get_info.js - [BeEF](http://beefproject.com/)
-* wec_cssbug.html - [CSS3事件的消息回调BUG](http://www.web-tinker.com/article/20339.html)
-* get_networkip.js - [Network IP Address via ipcalf.com](http://net.ipcalf.com/)
+* Gum.js            - [xss.js](http://zone.wooyun.org/content/2113)
+* get_info.js       - [BeEF](http://beefproject.com/)
+* wec_cssbug.html   - [CSS3事件的消息回调BUG](http://www.web-tinker.com/article/20339.html)
+* get_networkip.js  - [Network IP Address via ipcalf.com](http://net.ipcalf.com/)
 * tool_keylogger.js - [XSS keylogger](http://wiremask.eu/xss-keylogger/)
 
 Helptext
@@ -53,19 +53,19 @@ server处代码会直接在项目触发时执行,
 
 **3.Server code keyword**
 
-ifstatus  
+*ifstatus*
 对变量ifstatus赋值, 会触发对应status.  
 如:
 
 	ifstatus = 404
 
-returns  
-对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.  
+*returns*
+对变量returns赋值，会返回对其赋值的内容.  
 如:
 
 	returns = '<script>alert(1)</script>'
 
-gum.backinfo  
+*gum.backinfo*
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。  
 当返回之后最好清空它。
 
@@ -129,7 +129,7 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 
     info_cookie = str(request.forms.get('cookie'))
 	sessionid[referer][1]['cookie'] = info_cookie
-	browserinfo = b64encode(sessionid.get(referer))
+	browserinfo = sessionid.get(referer)
 
 >	不推荐使用多次接收，默认已关闭。
 
@@ -175,3 +175,7 @@ chrome
             Dependencies Plus
 
 >   好吧我知道不会有人帮我写插件的...
+
+Developers
+----------
+*   [quininer](mailto:quininer@live.com)([@quininers](https://twitter.com/quininers))

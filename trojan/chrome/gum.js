@@ -35,7 +35,9 @@ gum = function(){
         if(u.jquery()){
             $(e).bind(name, foo);
         }else{
-            e.addEventListener?e.addEventListener(name, foo, false):e.attachEvent('on'+name, foo);
+            (e.addEventListener)?(
+                e.addEventListener(name, foo, false)):(
+                e.attachEvent('on'+name, foo));
         };
     };
 

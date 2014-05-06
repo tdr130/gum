@@ -78,7 +78,7 @@ def send_static(filename):
 @error(405)
 @error(500)
 def errors(gumerror):
-    setheader()
+#    setheader()
     return template('errors',
             error = gumerror.status[:3],
             ctime = ctime())
