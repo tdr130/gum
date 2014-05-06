@@ -65,13 +65,13 @@ python ./chewingum.py [ host port debug | -h ]
 <a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
 
 <ul>
-<li>Gum.js - <a href="http://zone.wooyun.org/content/2113">xss.js</a>
+<li>Gum.js            - <a href="http://zone.wooyun.org/content/2113">xss.js</a>
 </li>
-<li>get_info.js - <a href="http://beefproject.com/">BeEF</a>
+<li>get_info.js       - <a href="http://beefproject.com/">BeEF</a>
 </li>
-<li>wec_cssbug.html - <a href="http://www.web-tinker.com/article/20339.html">CSS3事件的消息回调BUG</a>
+<li>wec_cssbug.html   - <a href="http://www.web-tinker.com/article/20339.html">CSS3事件的消息回调BUG</a>
 </li>
-<li>get_networkip.js - <a href="http://net.ipcalf.com/">Network IP Address via ipcalf.com</a>
+<li>get_networkip.js  - <a href="http://net.ipcalf.com/">Network IP Address via ipcalf.com</a>
 </li>
 <li>tool_keylogger.js - <a href="http://wiremask.eu/xss-keylogger/">XSS keylogger</a>
 </li>
@@ -104,21 +104,21 @@ browserinfo = {
 
 <p><strong>3.Server code keyword</strong></p>
 
-<p>ifstatus<br>
+<p><em>ifstatus</em>
 对变量ifstatus赋值, 会触发对应status.<br>
 如:</p>
 
 <pre><code>ifstatus = 404
 </code></pre>
 
-<p>returns<br>
-对变量returns赋值，在iferror为空的情况下, 会返回对其赋值的内容.<br>
+<p><em>returns</em>
+对变量returns赋值，会返回对其赋值的内容.<br>
 如:</p>
 
 <pre><code>returns = '&lt;script&gt;alert(1)&lt;/script&gt;'
 </code></pre>
 
-<p>gum.backinfo<br>
+<p><em>gum.backinfo</em>
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。<br>
 当返回之后最好清空它。</p>
 
@@ -192,7 +192,7 @@ send_mail(gum_emailremind)
 
 <pre><code>info_cookie = str(request.forms.get('cookie'))
 sessionid[referer][1]['cookie'] = info_cookie
-browserinfo = b64encode(sessionid.get(referer))
+browserinfo = sessionid.get(referer)
 </code></pre>
 
 <blockquote>
@@ -251,6 +251,13 @@ browserinfo = b64encode(sessionid.get(referer))
 <blockquote>
 <p>好吧我知道不会有人帮我写插件的...</p>
 </blockquote>
+
+<h2>
+<a name="developers" class="anchor" href="#developers"><span class="octicon octicon-link"></span></a>Developers</h2>
+
+<ul>
+<li>  <a href="mailto:quininer@live.com">quininer</a>(<a href="https://twitter.com/quininers">@quininers</a>)</li>
+</ul>
       </section>
     </div>
 
