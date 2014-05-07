@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="chewingum-alpha0203451140505" class="anchor" href="#chewingum-alpha0203451140505"><span class="octicon octicon-link"></span></a>ChewinGum [alpha][0.20345][1140505]</h1>
+<a name="chewingum-beta0291140507" class="anchor" href="#chewingum-beta0291140507"><span class="octicon octicon-link"></span></a>ChewinGum [beta][0.29][1140507]</h1>
 
 <h2>
 <a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>Name</h2>
@@ -51,8 +51,9 @@ python ./chewingum.py [ host port debug | -h ]
 
 <ul>
 <li><a href="http://bottlepy.org/">Bottle-0.12</a></li>
+<li><a href="https://github.com/zeekay/bottle-websocket/">Bottle-websocket</a></li>
 <li>
-<p><a href="https://github.com/zeekay/bottle-websocket/">Bottle-websocket</a></p>
+<p><a href="http://purecss.io/">Pure</a></p>
 
 <h2>
 <a name="unnecessaries" class="anchor" href="#unnecessaries"><span class="octicon octicon-link"></span></a>unnecessaries</h2>
@@ -94,11 +95,11 @@ python ./chewingum.py [ host port debug | -h ]
 <p>如:</p>
 
 <pre><code>serverinfo = {
-    'referer':b64encode(str(request.headers.get('Referer'))),
-    'ctime':b64encode(str(ctime()))
+    'referer':b64ens(request.headers.get('Referer'))),
+    'ctime':b64ens(ctime()))
 }
 browserinfo = {
-    'cookie':b64encode(str(request.forms.get('cookie')))
+    'cookie':b64ens(request.forms.get('cookie')))
 }
 </code></pre>
 
@@ -185,12 +186,12 @@ send_mail(gum_emailremind)
 <p>单次接收browser info可以参考上面的2.server<br>
 也可以这样</p>
 
-<pre><code>browserinfo['infoname'] = b64encode(str(request.forms.get('infoname')))
+<pre><code>browserinfo['infoname'] = b64ens(request.forms.get('infoname'))
 </code></pre>
 
 <p>多次接收browser info可以像这样,</p>
 
-<pre><code>info_cookie = str(request.forms.get('cookie'))
+<pre><code>info_cookie = b64ens(request.forms.get('cookie'))
 sessionid[referer][1]['cookie'] = info_cookie
 browserinfo = sessionid.get(referer)
 </code></pre>
