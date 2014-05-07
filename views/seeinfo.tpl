@@ -22,7 +22,7 @@
     %if info.split('_')[0] == 'png':
         {{info}}:<img src='data:image/png;base64,{{browserinfo[info]}}'><br>
     %else:
-        {{info}}:<pre><code>{{browserinfo[info]}}</code></pre>
+        {{info}}:<pre><code>{{b64decode(browserinfo[info])}}</code></pre>
     %end
 %end
     </div>
