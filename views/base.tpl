@@ -21,15 +21,15 @@
                         <li {{! liclass if title == 'Project' else ''}}>
                             <a href='{{'#' if title == 'Home' else '/home#'}}projects'>Projects</a>
                         </li>
-                        <li {{! liclass if title == 'Object' else ''}}>
+                        <li {{! liclass if title in ('Object', 'Seeinfo') else ''}}>
                             <a href='{{'#' if title == 'Home' else '/home#'}}objects'>Objects</a>
                         </li>
                         <li {{! liclass if title == 'Console' else ''}}>
                             <a href='/home/console'>Console</a>
                         </li>
                         <li><a href='/home/rekey'>Setkey</a></li>
-                        <li {{! liclass if title == 'Upload' else ''}}>
-                            <a href='/home/plus'>Upload</a>
+                        <li {{! liclass if title == 'Plugins' else ''}}>
+                            <a href='/home/plus'>Plugins</a>
                         </li>
                         <li><a href='#' onclick='logout()'>Logout</a></li>
                     </ul>

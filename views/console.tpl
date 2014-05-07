@@ -5,7 +5,7 @@
 <div id='main'>
     <div class='header'>
         <h1>{{title}}</h1>
-        <h2></h2>
+        <h2>In fact, landscaping can..</h2>
     </div>
     <div class='content'>
         <h2 class='content-subhead'>Command</h2>

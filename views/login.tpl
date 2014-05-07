@@ -3,7 +3,7 @@
 %include('static.tpl')
     </head>
 	<body>
-	    <form class="pure-form pure-form" action='{{uri}}' method='POST' enctype='multipart/form-data'>
+	    <form class="pure-form" action='{{uri}}' method='POST' enctype='multipart/form-data'>
 		    <fieldset>
                 <legend>Key</legend>
 			    <input type='file' name='filekey'>
