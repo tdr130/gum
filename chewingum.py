@@ -346,7 +346,7 @@ def ing():
         if referer and not projects:
             projects = gum.select('project', [
                 'upkey', 'id', 'server', 'browser'
-                ], {'referer':urlparse(referer).netlog}).fetchone()
+                ], {'referer':urlparse(referer).netloc}).fetchone()
         if not referer or not projects:
             projects = gum.select('project', [
                 'upkey', 'id', 'server', 'browser'
@@ -445,7 +445,7 @@ def console():
             title='Console')
 
 def main(host, port, debug):
-#    run(host=host, port=port, app=apps, debug=debug)
+#    run(host=host, port=port, debug=debug)#, app=apps)
     run(host=host, port=port, debug=debug, server=GeventWebSocketServer)
 
 if __name__ == '__main__':
