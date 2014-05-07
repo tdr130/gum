@@ -14,7 +14,7 @@
                 <div class='pure-menu pure-menu-open'>
                     <a class='pure-menu-heading' href='#'>GUM</a>
                     <ul>
-%liclass = "class='menu-item-divided pure-menu-selected'
+%liclass = "class='menu-item-divided pure-menu-selected'"
                         <li {{liclass if title == 'Home' else ''}}>
                             <a href='{{'#main' if title == 'Home' else '/home'}}'></a>
                         </li>
