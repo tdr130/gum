@@ -15,27 +15,23 @@
                     <a class='pure-menu-heading' href='#'>GUM</a>
                     <ul>
 %liclass = "class='menu-item-divided pure-menu-selected'"
-                        <li {{liclass if title == 'Home' else ''}}>
-                            <a href='{{'#main' if title == 'Home' else '/home'}}'></a>
-                        </li>
                         <li>
+                            <a href='{{'#main' if title == 'Home' else '/home'}}'>Home</a>
+                        </li>
+                        <li {{! liclass if title == 'Project' else ''}}>
                             <a href='{{'#' if title == 'Home' else '/home#'}}projects'>Projects</a>
                         </li>
-                        <li>
+                        <li {{! liclass if title == 'Object' else ''}}>
                             <a href='{{'#' if title == 'Home' else '/home#'}}objects'>Objects</a>
                         </li>
-                        <li {{liclass if title == 'Console' else ''}}>
+                        <li {{! liclass if title == 'Console' else ''}}>
                             <a href='/home/console'>Console</a>
-                        <li>
-                        <li {{liclass if title == 'Setkey' else ''}}>
-                            <a href='/home/rekey'>Setkey</a>
                         </li>
-                        <li {{liclass if title == 'Upload' else ''}}>
+                        <li><a href='/home/rekey'>Setkey</a></li>
+                        <li {{! liclass if title == 'Upload' else ''}}>
                             <a href='/home/plus'>Upload</a>
                         </li>
-                        <li>
-                            <a href='#' onclick='logout()'>Logout</a>
-                        <li>
+                        <li><a href='#' onclick='logout()'>Logout</a></li>
                     </ul>
                 </div>
             </div>
