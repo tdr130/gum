@@ -56,11 +56,11 @@ def setheader():
 
 def validate(types):
     if types == 'login':
-        setheader()
         login_key = request.get_cookie('key')
         if login_key:
             ausers.execute("select cookie from user where id=1")
             if login_key in ausers.fetchone():
+                setheader()
                 return False
     elif types == 'token':
         ctoken = request.get_cookie('token')
@@ -68,6 +68,9 @@ def validate(types):
         if ctoken and ptoken and ctoken == ptoken:
             return False
     return True
+
+def b64ens(u):
+    return b64encode(str(u))
 
 @get('/static/<filename:path>')
 @post('/static/<filename:path>')
@@ -175,10 +178,9 @@ def login_rekey():
 def logout():
     if validate('login') or validate('token'):
         abort(404)
-    if request.forms.get('logout') == 'logout':
-        ausers.execute("update user set cookie=? where id=1",
-                [None])
-        auser.commit()
+    ausers.execute("update user set cookie=? where id=1",
+            [None])
+    auser.commit()
     redirect('/login')
 
 @route('/home')
@@ -192,6 +194,7 @@ def home():
     gum.select('project', ['id'], {'upkey':'yes'})
     newid = gum.cs.fetchone()[0]
     return template('home',
+            title='Home',
             new = newid,
             projects = projects, objects = objects,
             token = getoken())
@@ -201,7 +204,7 @@ def save_project(ids):
     upkey = gum.select('project', ['upkey'], {'id':ids}).fetchone()
     if validate('login') or validate('token') or not upkey:
         abort(404)
-    referer = request.forms.get('referer')
+    referer = request.forms.get('name')
     if not referer:
         return 0
     setserver = str(request.forms.get('server'))
@@ -224,12 +227,13 @@ def project_edit(ids):
     projects = gum.select('project', ['*'], {'id':ids}).fetchone()
     if not projects:
         abort(404)
-    return template('aim',
-            id = ids, state = 0,
+    return template('setting.tpl',
+            id = ids,
+            title='Project',
             name = projects[2] if projects[2] else '',
             server = projects[4] if projects[4] else '',
             browser = projects[3] if projects[3] else '',
-            life = '',
+            idsalt = ids,
             token = getoken())
 
 @route('/home/object/<idsalt:re:[a-z0-9]+>')
@@ -242,8 +246,9 @@ def object_edit(idsalt):
     if not objects or objects[0] == 'yes':
         abort(404)
     infos = gum.select('info', ['id'], {'idsalt':idsalt}).fetchall()
-    return template('aim',
-            id = objects[1], state = 1,
+    return template('setting.tpl',
+            id = objects[1],
+            title='Object',
             name = objects[1],
             browser = objects[2] if objects[2] else '',
             server = objects[3] if objects[3] else '',
@@ -280,14 +285,15 @@ def seeinfo(ids):
         ], {'id':ids}).fetchone()
     return template('seeinfo',
             idsalt = infos[0],
+            title='Seeinfo',
             serverinfo = loads(infos[1]),
             browserinfo = loads(infos[2]),
-            ids = ids, states = 'info',
+            ids = ids,
             token = getoken())
 
-@post('/home/delete/<state:re:object>/<ids:re:[a-z0-9]+>')
-@post('/home/delete/<state:re:project>/<ids:int>')
-@post('/home/delete/<state:re:info>/<ids:int>')
+@post('/home/delete/<state:re:Object>/<ids:re:[a-z0-9]+>')
+@post('/home/delete/<state:re:Project>/<ids:int>')
+@post('/home/delete/<state:re:Info>/<ids:int>')
 def deletes(state, ids):
     if validate('login') or validate('token'):
         abort(404)
@@ -304,7 +310,9 @@ def deletes(state, ids):
 def plus_list():
     if validate('login'):
         abort(404)
-    return template('plus', token=getoken())
+    return template('plus',
+            token=getoken(),
+            title='Plugins')
 #    dirpath = request.query.ls if request.query.ls else './static/'
 #    template('plus',lsdir = listdir(dirpath))
 
@@ -397,8 +405,9 @@ def connect(ws):
     else:
         lineor = False
         idsalt = request.get_cookie('gum')
-    upkey = gum.select('object', ['upkey'], {'idsalt':idsalt}).fetchone()[0]
-    if not idsalt or not upkey or upkey == 'yes':
+    idsalt = idsalt if idsalt else ''
+    upkey = gum.select('object', ['upkey'], {'idsalt':idsalt}).fetchone()
+    if not idsalt or not upkey or upkey[0] == 'yes':
         abort(404)
     if lineor:
         consoles[idsalt] = ws
@@ -430,7 +439,10 @@ def connect(ws):
 @get('/home/console')
 def console():
     domain = request.headers.get('Host')
-    return template('console', domain=domain)
+    return template('console',
+            domain=domain,
+            token=getoken(),
+            title='Console')
 
 def main(host, port, debug):
 #    run(host=host, port=port, app=apps, debug=debug)

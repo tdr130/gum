@@ -1,18 +1,30 @@
+%rebase('base.tpl', token=token, title=title)
 %from base64 import b64decode
-<html>
-	<head></head>
-	<body>
-%include('logout.tpl', token=token)
-%include('delete.tpl', states=states, id=ids, token=token)
-		<a href='/home/object/{{idsalt}}'><h1>object</h1></a>
-		<br><b>Sever info:</b><br>
-%for http in serverinfo:
-		<p>{{http}}:{{b64decode(serverinfo[http])}}</p>
+<div id='main'>
+    <div class='header'>
+        <h1>{{title}}</h1>
+        <h2><a href='/home/object/{{idsalt}}'>Object</a></h2>
+    </div>
+
+    <div class='content'>
+        <h2 class='content-subhead'>Server info</h2>
+%for info in serverinfo:
+    %if info.split('_')[0] == 'png':
+        {{info}}:<img src='data:image/png;base64,{{serverinfo[info]}}'><br>
+    %else:
+        {{info}}:<pre><code>{{b64decode(serverinfo[info])}}</code></pre><br>
+    %end
 %end
-		<br><br>
-		<b>Browser info:</b><br>
-%for script in browserinfo:
-		<p>{{script}}:{{b64decode(browserinfo[script])}}</p>
+    </div>
+    <div class='content'>
+        <h2 class='content-subhead'>Browser info</h2>
+%for info in browserinfo:
+    %if info.split('_')[0] == 'png':
+        {{info}}:<img src='data:image/png;base64,{{browserinfo[info]}}'><br>
+    %else:
+        {{info}}:<pre><code>{{browserinfo[info]}}</code></pre>
+    %end
 %end
-	</body>
-</html>
+    </div>
+%include('delete.tpl', token=token, title=title, id=ids)
+</div>

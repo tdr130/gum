@@ -1,4 +1,4 @@
-# ChewinGum [alpha][0.20345][1140505]
+# ChewinGum [beta][0.29][1140507]
 
 Name
 ----
@@ -13,6 +13,7 @@ Dependencies
 ------------
 * [Bottle-0.12](http://bottlepy.org/)
 * [Bottle-websocket](https://github.com/zeekay/bottle-websocket/)
+* [Pure](http://purecss.io/)
 
   unnecessaries
   -------------
@@ -44,11 +45,11 @@ server处代码会直接在项目触发时执行,
 如:
 
     serverinfo = {
-	    'referer':b64encode(str(request.headers.get('Referer'))),
-    	'ctime':b64encode(str(ctime()))
+	    'referer':b64ens(request.headers.get('Referer'))),
+    	'ctime':b64ens(ctime()))
 	}
 	browserinfo = {
-    	'cookie':b64encode(str(request.forms.get('cookie')))
+    	'cookie':b64ens(request.forms.get('cookie')))
 	}
 
 **3.Server code keyword**
@@ -123,11 +124,11 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 单次接收browser info可以参考上面的2.server  
 也可以这样
 
-    browserinfo['infoname'] = b64encode(str(request.forms.get('infoname')))
+    browserinfo['infoname'] = b64ens(request.forms.get('infoname'))
 
 多次接收browser info可以像这样,
 
-    info_cookie = str(request.forms.get('cookie'))
+    info_cookie = b64ens(request.forms.get('cookie'))
 	sessionid[referer][1]['cookie'] = info_cookie
 	browserinfo = sessionid.get(referer)
 

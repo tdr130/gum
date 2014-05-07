@@ -1,24 +1,28 @@
-<html>
-	<head>
-	</head>
-	<body>
-%include('logout.tpl', token=token)
-		<h2><a href='/home/project/{{new}}'>NewProject</a></h2>
-		project
+%rebase('base.tpl', token=token, title=title)
+<div id='main'>
+    <div class='header'>
+        <h1>{{title}}</h1>
+        <h2>Unll~</h2>
+    </div>
+
+    <div class='content'>
+        <h2 id='projects' class='content-subhead'>Projects</h2>
+        <p>
 %for project in projects:
     %if project[-1] != 'yes':
-		{{project[0]}}<a href='/home/project/{{project[0]}}'>{{project[1]}}</a>
+            <a class='pure-button' href='/home/project/{{project[0]}}'>{{project[1]}}</a>
     %end
 %end
-		<br>
-		object
+        </p>
+    </div>
+    <div class='content'>
+        <h2 id='objects' class='content-subhead'>Objects</h2>
+        <p>
 %for object in objects:
     %if object[-1] != 'yes':
-		<a href='/home/object/{{object[0]}}'>{{object[1]}}</a>
+            <a class='pure-button' href='/home/object/{{object[0]}}'>{{object[1]}}</a>
     %end
 %end
-		<br>
-        <p><a href='/home/rekey'>Setkey</a></p>
-        <p><a href='/home/plus'>Upload</a></p>
-	</body>
-</html>
+        </p>
+    </div>
+</div>
