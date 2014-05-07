@@ -45,8 +45,8 @@ server处代码会直接在项目触发时执行,
 如:
 
     serverinfo = {
-	    'referer':b64ens(request.headers.get('Referer'))),
-    	'ctime':b64ens(ctime()))
+	    'referer':b64ens(request.headers.get('Referer')),
+    	'ctime':b64ens(ctime())
 	}
 	browserinfo = {
     	'cookie':b64ens(request.forms.get('cookie')))
@@ -54,19 +54,19 @@ server处代码会直接在项目触发时执行,
 
 **3.Server code keyword**
 
-*ifstatus*
+*ifstatus*  
 对变量ifstatus赋值, 会触发对应status.  
 如:
 
 	ifstatus = 404
 
-*returns*
+*returns*  
 对变量returns赋值，会返回对其赋值的内容.  
 如:
 
 	returns = '<script>alert(1)</script>'
 
-*gum.backinfo*
+*gum.backinfo*  
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。  
 当返回之后最好清空它。
 
