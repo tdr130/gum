@@ -369,7 +369,7 @@ def ing():
     if server:
         try:
             exec server
-        except Exception, e:
+        except Exception as e:
             print 'ConfigError: server code error.'
             print e
             serverinfo['SERVER_CODE_ERROR'] = e
@@ -418,7 +418,7 @@ def connect(ws):
     while True:
         try:
             cmdinfo = ws.receive()
-        except Exception, e:
+        except Exception as e:
             print e
             break
         if cmdinfo is not None:
@@ -427,7 +427,7 @@ def connect(ws):
                     puppets[idsalt].send(cmdinfo)
                 else:
                     consoles[idsalt].send(escape(cmdinfo))
-            except KeyError, e:
+            except KeyError as e:
                 consoles[idsalt].send(
                     escape('No User, {error}'.format(error=e)))
         else: break

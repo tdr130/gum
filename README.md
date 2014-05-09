@@ -177,6 +177,11 @@ chrome
 
 >   好吧我知道不会有人帮我写插件的...
 
+Demo
+----
+![](http://quininer.github.io/image/xsshell_1.png)
+![](http://quininer.github.io/image/xsshell_2.png)
+
 Developers
 ----------
 *   [quininer](mailto:quininer@live.com)([@quininers](https://twitter.com/quininers))
