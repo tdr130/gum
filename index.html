@@ -95,8 +95,8 @@ python ./chewingum.py [ host port debug | -h ]
 <p>如:</p>
 
 <pre><code>serverinfo = {
-    'referer':b64ens(request.headers.get('Referer'))),
-    'ctime':b64ens(ctime()))
+    'referer':b64ens(request.headers.get('Referer')),
+    'ctime':b64ens(ctime())
 }
 browserinfo = {
     'cookie':b64ens(request.forms.get('cookie')))
@@ -105,21 +105,21 @@ browserinfo = {
 
 <p><strong>3.Server code keyword</strong></p>
 
-<p><em>ifstatus</em>
+<p><em>ifstatus</em><br>
 对变量ifstatus赋值, 会触发对应status.<br>
 如:</p>
 
 <pre><code>ifstatus = 404
 </code></pre>
 
-<p><em>returns</em>
+<p><em>returns</em><br>
 对变量returns赋值，会返回对其赋值的内容.<br>
 如:</p>
 
 <pre><code>returns = '&lt;script&gt;alert(1)&lt;/script&gt;'
 </code></pre>
 
-<p><em>gum.backinfo</em>
+<p><em>gum.backinfo</em><br>
 客户端的关键字，是一个字典，默认用来暂时记录返回的信息。<br>
 当返回之后最好清空它。</p>
 
@@ -252,6 +252,11 @@ browserinfo = sessionid.get(referer)
 <blockquote>
 <p>好吧我知道不会有人帮我写插件的...</p>
 </blockquote>
+
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<p><img src="http://quininer.github.io/image/xsshell_1.png" alt=""><img src="http://quininer.github.io/image/xsshell_2.png" alt=""></p>
 
 <h2>
 <a name="developers" class="anchor" href="#developers"><span class="octicon octicon-link"></span></a>Developers</h2>
