@@ -1,4 +1,4 @@
-# ChewinGum [beta][0.29][1140507]
+# ChewinGum [beta][0.292][1140510]
 
 Name
 ----
@@ -49,7 +49,7 @@ server处代码会直接在项目触发时执行,
     	'ctime':b64ens(ctime())
 	}
 	browserinfo = {
-    	'cookie':b64ens(request.forms.get('cookie')))
+    	'cookie':b64ens(request.forms.cookie)
 	}
 
 **3.Server code keyword**
@@ -124,11 +124,11 @@ $default是默认项目, xss触发时若未发现对应项目则按照此配置�
 单次接收browser info可以参考上面的2.server  
 也可以这样
 
-    browserinfo['infoname'] = b64ens(request.forms.get('infoname'))
+    browserinfo['infoname'] = b64ens(request.forms.infoname)
 
 多次接收browser info可以像这样,
 
-    info_cookie = b64ens(request.forms.get('cookie'))
+    info_cookie = b64ens(request.forms.cookie)
 	sessionid[referer][1]['cookie'] = info_cookie
 	browserinfo = sessionid.get(referer)
 

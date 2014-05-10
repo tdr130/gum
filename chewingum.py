@@ -64,13 +64,13 @@ def validate(types):
                 return False
     elif types == 'token':
         ctoken = request.get_cookie('token')
-        ptoken = request.forms.get('token')
+        ptoken = request.forms.token
         if ctoken and ptoken and ctoken == ptoken:
             return False
     return True
 
 def b64ens(u):
-    return b64encode(str(u))
+    return b64encode(unicode(u))
 
 @get('/static/<filename:path>')
 @post('/static/<filename:path>')
@@ -136,13 +136,13 @@ def login_rekey():
         else:
             abort(404)
     filekey = request.files.get('filekey')
-    urlkey = request.forms.get('urlkey')
+    urlkey = request.forms.urlkey
     if filekey:
         key = filekey.file.read()
     elif urlkey:
         itime = strftime('%y%m%d%H', localtime(time()))
-        ausers.execute('select key from user where id=2')
-        if itime == ausers.fetchone()[-1]:
+        ttime = ausers.execute('select key from user where id=2').fetchone()
+        if ttime and itime in ttime:
             ausers.execute('updata user set key=? where id=2',
                     [itime])
             auser.commit()
@@ -204,11 +204,11 @@ def save_project(ids):
     upkey = gum.select('project', ['upkey'], {'id':ids}).fetchone()
     if validate('login') or validate('token') or not upkey:
         abort(404)
-    referer = request.forms.get('name')
+    referer = request.forms.name
     if not referer:
         return 0
-    setserver = str(request.forms.get('server'))
-    setbrowser = str(request.forms.get('browser'))
+    setserver = str(request.forms.server)
+    setbrowser = str(request.forms.browser)
     gum.update('project', {
         'upkey':'no',
         'referer':referer,
@@ -262,11 +262,11 @@ def save_object(idsalt):
     if validate('login') or validate('token')\
             or not upkey or upkey == 'yes':
         abort(404)
-    name = request.forms.get('name')
+    name = request.forms.name
     if not name:
         return False
-    server = request.forms.get('server')
-    browser = request.forms.get('browser')
+    server = request.forms.server
+    browser = request.forms.browser
     gum.update('object', {
         'name':name,
         'browser':browser,
@@ -321,7 +321,7 @@ def plus_up():
     if validate('login') or validate('token'):
         abort(404)
     upload = request.files.get('plus')
-    upload.save(request.forms.get('path') + upload.filename)
+    upload.save(request.forms.path + upload.filename)
     redirect('/home/plus')
 
 @get('/ing')
