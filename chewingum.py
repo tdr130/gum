@@ -14,6 +14,7 @@ from time import time, ctime, strftime, localtime
 from bottle.ext.websocket import websocket, GeventWebSocketServer
 #from beaker.middleware import SessionMiddleware as sessionm
 from httplib import HTTPConnection as httpconn
+from geventwebsocket import WebSocketError
 from base64 import b64encode, b64decode
 from urlparse import urlparse
 from json import dumps, loads
@@ -428,7 +429,7 @@ def connect(ws):
 #        gum.commit()
     while True:
         try:
-            cmdinfo = ws.receive()
+            cmdinfo = ws.receive().decode('utf8')
         except Exception as e:
             print e
             break
