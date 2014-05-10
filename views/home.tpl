@@ -2,7 +2,7 @@
 <div id='main'>
     <div class='header'>
         <h1>{{title}}</h1>
-        <h2>Unll~</h2>
+        <h2><a href='/home/project/{{new}}'>New</a></h2>
     </div>
 
     <div class='content'>

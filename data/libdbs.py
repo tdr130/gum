@@ -7,6 +7,7 @@ class sqlitei:
     '''Encapsulation sql.'''
     def __init__(self, path):
         self.db = sqlite3.connect(path)
+#        self.db.text_factory = str
         self.cs = self.db.cursor()
 
     def commit(self):
