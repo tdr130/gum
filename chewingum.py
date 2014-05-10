@@ -136,7 +136,7 @@ def rekey():
 @post('/home/rekey')
 def login_rekey():
     rekey = None
-    referer = str(request.headers.get('Referer'))
+    referer = unicode(request.headers.get('Referer'))
     if urlparse(referer).path == '/home/rekey':
         if not validate('login'):
             rekey = True
@@ -214,8 +214,8 @@ def save_project(ids):
     referer = request.forms.name
     if not referer:
         return 0
-    setserver = str(request.forms.server)
-    setbrowser = str(request.forms.browser)
+    setserver = unicode(request.forms.server)
+    setbrowser = unicode(request.forms.browser)
     gum.update('project', {
         'upkey':'no',
         'referer':referer,
