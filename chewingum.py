@@ -123,15 +123,14 @@ def gumjs():
             domain = domain,
             script = projects[-1] if projects[-1] else '')
 
-@get('/login')
-def login():
-    return template('login', uri='/login')
+#    return template('login', uri='/login')
 
+@get('/login')
 @get('/home/rekey')
 def rekey():
     if validate('login'):
-        abort(404)
-    return template('login', uri='/home/rekey')
+        return template('login', uri='/login')
+    return template('login', uri='/home/rekey', token=getoken())
 
 @post('/login')
 @post('/home/rekey')
@@ -140,6 +139,8 @@ def login_rekey():
     referer = unicode(request.headers.get('Referer'))
     if urlparse(referer).path == '/home/rekey':
         if not validate('login'):
+            if validate('token'):
+                abort(404)
             rekey = True
         else:
             abort(404)
@@ -160,7 +161,8 @@ def login_rekey():
             httpkey = httpconn(keyurl.netloc)
             httpkey.request('GET', keyurl.path)
             key = httpkey.getresponse().read()
-        except:
+        except Exception as e:
+            print unicode(e)
             redirect(referer)
     else:
         redirect(referer)
@@ -174,8 +176,8 @@ def login_rekey():
         else:
             redirect(referer)
     else:
-        ausers.execute("select id,salt,key from user where id=1")
-        keyhash = getmd5(b64encode(str(ausers.fetchone()) + ctime()))
+        ausers.execute("select id,salt,key,cookie from user where id=1")
+        keyhash = getmd5(b64ens(ausers.fetchone()) + random())
         ausers.execute("update user set cookie=? where id=1", [keyhash])
         response.set_cookie('key', keyhash, httponly = True,
                 max_age = 604800, path = '/home')
