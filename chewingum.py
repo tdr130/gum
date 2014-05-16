@@ -19,23 +19,21 @@ from base64 import b64encode, b64decode
 from urlparse import urlparse
 from json import dumps, loads
 from random import random
-from bottle import route, error, get, post,\
+from bottle import run, error, get, post,\
 	static_file, request, template, BaseRequest,\
-	response, redirect, abort, run, app
+	response, redirect, abort, app
 
 BaseRequest.MEMFILE_MAX = 1024 * 1024
 
-#	sqlite sqldb
+#Sqlite Sqldb
 auser = sqlite3.connect('./data/auser.db')
 ausers = auser.cursor()
-#gum = sqlite3.connect('./data/gum.db')
-#gums = gum.cursor()
 gum = sqlitei('./data/gum.db')
 
 ausers.execute("select salt from user where id=1")
 salt = ausers.fetchone()[-1]
 '''
-#	session
+#Session (bottle.ext.session
 session_opt = {
     'session.type':'file',
     'session.cookie_expires':300,
@@ -123,8 +121,6 @@ def gumjs():
             domain = domain,
             script = projects[-1] if projects[-1] else '')
 
-#    return template('login', uri='/login')
-
 @get('/login')
 @get('/home/rekey')
 def rekey():
@@ -193,7 +189,7 @@ def logout():
     auser.commit()
     redirect('/login')
 
-@route('/home')
+@get('/home')
 def home():
     if validate('login'):
         abort(404)
@@ -210,7 +206,7 @@ def home():
             token = getoken())
 
 @post('/home/<ids:int>/setting')
-def save_project(ids):
+def set_project(ids):
     upkey = gum.select('project', ['upkey'], {'id':ids}).fetchone()
     if validate('login') or validate('token') or not upkey:
         abort(404)
@@ -230,8 +226,8 @@ def save_project(ids):
     gum.commit()
     redirect(request.headers.get('Referer'))
 
-@route('/home/project/<ids:int>')
-def project_edit(ids):
+@get('/home/project/<ids:int>')
+def edit_project(ids):
     if validate('login'):
         abort(404)
     projects = gum.select('project', ['*'], {'id':ids}).fetchone()
@@ -246,8 +242,8 @@ def project_edit(ids):
             idsalt = ids,
             token = getoken())
 
-@route('/home/object/<idsalt:re:[a-z0-9]+>')
-def object_edit(idsalt):
+@get('/home/object/<idsalt:re:[a-z0-9]+>')
+def edit_object(idsalt):
     if validate('login'):
         abort(404)
     objects = gum.select('object', [
@@ -267,7 +263,7 @@ def object_edit(idsalt):
             token = getoken())
 
 @post('/home/<idsalt:re:[a-z0-9]+>/useing')
-def save_object(idsalt):
+def set_object(idsalt):
     upkey = gum.select('object', ['upkey'], {'idsalt':idsalt}).fetchone()[0]
     if validate('login') or validate('token')\
             or not upkey or upkey == 'yes':
@@ -285,7 +281,7 @@ def save_object(idsalt):
     gum.commit()
     redirect(request.headers.get('Referer'))
 
-@route('/home/<ids:int>/info')
+@get('/home/<ids:int>/info')
 def seeinfo(ids):
     upkey = gum.select('info', ['upkey'], {'id':ids}).fetchone()[0]
     if validate('login') or not upkey or upkey == 'yes':
@@ -318,7 +314,7 @@ def deletes(state, ids):
     redirect('/home')
 
 @get('/home/plus')
-def plus_list():
+def list_plus():
     if validate('login'):
         abort(404)
     return template('plus',
