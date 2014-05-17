@@ -7,7 +7,7 @@
 	    <form class="pure-form" action='{{uri}}' method='POST' enctype='multipart/form-data'>
 		    <fieldset>
                 <legend>Key</legend>
-$if uri == '/home/rekey':
+%if uri == '/home/rekey':
                 <input type='hidden' name='token' value='{{token}}'>
 %end
 			    <input type='file' name='filekey'>

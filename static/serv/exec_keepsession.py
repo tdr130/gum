@@ -25,9 +25,9 @@ def load():
 	    frequency = b64encode(gum_keepsession['frequency']),
 	    endate = b64encode(gum_keepsession['endate'])
     ))
+    return
 
 def main():
-    import httplib
     from sys import argv
     from base64 import b64decode
     from urlparse import urlparse

@@ -5,7 +5,7 @@
         and
             gum.script('http://' + gum.domain + '/static/brows/get_networkip.js');
         and
-            null
+            browserinfo['networkip] = b64ens(request.forms.networkip)
 
 */
 

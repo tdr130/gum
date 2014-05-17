@@ -35,7 +35,7 @@ gum_get_info = function(){
     if (!!window.WebSocket || !!window.MozWebSocket){var info_websocket = 'yes'}else{var info_websocket = 'no'};
     if (!!navigator.javaEnabled()){var info_java = 'yes'}else{var info_java = 'no'}
     var info_url = document.URL;
-    
+
     gum.backinfo['cookie'] = info_cookie;
 	gum.backinfo['localStorage'] = info_localStorage;
 	gum.backinfo['sessionStorage'] = info_sessionStorage;

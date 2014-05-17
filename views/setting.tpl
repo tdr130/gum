@@ -19,11 +19,11 @@
 
         <div class='content'>
             <h2 class='content-subhead'>Server Code</h2>
-            <textarea name='server' cols='80' rows='10'>{{server}}</textarea>
+            <textarea name='server' id='serv'>{{server}}</textarea>
         </div>
         <div class='content'>
             <h2 class='content-subhead'>Browser Code</h2>
-            <textarea name='browser' cols='80' rows='10'>{{browser}}</textarea>
+            <textarea name='browser' id='brows'>{{browser}}</textarea>
         </div>
         <input class='pure-button pure-button-primary' type='submit' value='Save'>
     </form>

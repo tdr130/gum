@@ -173,7 +173,7 @@ def login_rekey():
             redirect(referer)
     else:
         ausers.execute("select id,salt,key,cookie from user where id=1")
-        keyhash = getmd5(b64ens(ausers.fetchone()) + random())
+        keyhash = getmd5(b64ens(ausers.fetchone()) + unicode(random()))
         ausers.execute("update user set cookie=? where id=1", [keyhash])
         response.set_cookie('key', keyhash, httponly = True,
                 max_age = 604800, path = '/home')
@@ -405,7 +405,7 @@ consoles = {}
 victims = {}
 @get('/connect', apply=[websocket])
 @get('/home/connect', apply=[websocket])
-def connect(ws):
+def cconnect(ws):
     if not validate('login'):
         lineor = True
         idsalt = request.query.idsalt
