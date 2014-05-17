@@ -299,11 +299,11 @@ def seeinfo(ids):
 
 @post('/home/delete/<state:re:Object>/<ids:re:[a-z0-9]+>')
 @post('/home/delete/<state:re:Project>/<ids:int>')
-@post('/home/delete/<state:re:Info>/<ids:int>')
+@post('/home/delete/<state:re:Seeinfo>/<ids:int>')
 def deletes(state, ids):
     if validate('login') or validate('token'):
         abort(404)
-    state = state.lower()
+    state = 'info' if state == 'Seeinfo' else state.lower()
     idname = 'idsalt' if (state == 'object') else 'id'
     upkey = gum.select(state, ['upkey'], {idname:ids}).fetchone()
     if upkey and upkey != 'yes':
