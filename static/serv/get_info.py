@@ -7,13 +7,14 @@
 '''
 with open('./static/serv/get_info.py') as files: exec files.read()
 '''
-serverinfo['referer'] = b64ens(request.headers.get('Referer'))
+serverinfo['referer'] = b64ens(request.environ.get('HTTP_REFERER'))
 serverinfo['ctime'] = b64ens(ctime())
 serverinfo['remote_addr'] = b64ens(request.environ.get('REMOTE_ADDR'))
-serverinfo['x_forwarded_for'] = b64ens(request.headers.get('X-Forwarded-For'))
+serverinfo['x_forwarded_for'] = b64ens(request.environ.get('HTTP_X_FORWARDED_FOR'))
 serverinfo['user_agent'] = b64ens(request.headers.get('User-Agent'))
 serverinfo['accept_language'] = b64ens(request.headers.get('Accept-Language'))
 serverinfo['x_requested_with'] = b64ens(request.headers.get('X-Requested-With'))
+serverinfo['accept'] = b64ens(request.headers.get('Accept'))
 
 browserinfo['URL'] = b64ens(request.forms.url)
 browserinfo['cookie'] = b64ens(request.forms.cookie)
