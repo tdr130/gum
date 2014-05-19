@@ -1,4 +1,4 @@
-# ChewinGum [beta][0.2991][1140512]
+# ChewinGum [beta][0.2992][1140519]
 
 Name
 ----
@@ -8,12 +8,6 @@ Startup
 -------
     python ./config.py install [ salt filekeyPath | -h ]
     python ./chewingum.py [ host port debug | -h ]
-
-Dependencies
-------------
-* [Bottle-0.12](http://bottlepy.org/)
-* [Bottle-websocket](https://github.com/zeekay/bottle-websocket/)
-* [Pure](http://purecss.io/)
 
 Reference
 ---------
@@ -29,7 +23,7 @@ Helptext
 
 Plugins
 -------
-[Plugins]()
+[Plugins](https://github.com/quininer/gum/wiki/Plugins)
 
 Demo
 ----
