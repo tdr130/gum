@@ -34,7 +34,7 @@ Thank
 -----
 * [Pure](http://purecss.io/) 的前端模板。
 * [mramydnei](http://mramydnei.blogspot.jp/) 的偶尔测试。
-* [Dzinlife](https://twitter.com/Dzinlife/status/456682692956794880) 被我盗用了Loge...
+* [Dzinlife](https://twitter.com/Dzinlife/status/456682692956794880) 被我盗用了LOGO...
 
 Developers
 ----------
