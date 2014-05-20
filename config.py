@@ -17,7 +17,7 @@ def install(salt, filekey):
     with open(filekey) as keyfile: keyread = keyfile.read()
     hashs.update(b64encode(keyread) + salt)
     key = hashs.hexdigest()
-    auser = sqlite3.connect('./data/auser.db')
+    auser = sqlite3.connect('./data/user.db')
     ausers = auser.cursor()
     auser.execute('''
 	create table user(
@@ -75,12 +75,12 @@ def install(salt, filekey):
 
 if __name__ == '__main__':
     if '-h' in argv or '--help' in argv or len(argv) in (1, 3):
-        print '''
+        print('''
 usage:
 	python config.py install [ salt filekeyPath]
 
 	-h --help
-'''
+''')
         exit()
     elif 'install' in argv:
         if len(argv) == 4:

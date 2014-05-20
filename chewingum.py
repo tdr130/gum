@@ -3,8 +3,10 @@
 
 #from __future__ import unicode_literals
 
-import sqlite3
-from sys import argv
+from sys import argv, version_info
+
+ifpy3 = version_info >= (3, 0, 0)
+
 from cgi import escape
 from hashlib import md5
 #from os.path import isfile
@@ -13,10 +15,15 @@ from data.libdbs import sqlitei
 from time import time, ctime, strftime, localtime
 from bottle.ext.websocket import websocket, GeventWebSocketServer
 #from beaker.middleware import SessionMiddleware as sessionm
-from httplib import HTTPConnection as httpconn
+if ifpy3:
+    unicode = str
+    from urllib.parse import urlparse
+    from http.client import HTTPConnection as httpconn
+else:
+    from urlparse import urlparse
+    from httplib import HTTPConnection as httpconn
 from geventwebsocket import WebSocketError
 from base64 import b64encode, b64decode
-from urlparse import urlparse
 from json import dumps, loads
 from random import random
 from bottle import run, error, get, post,\
@@ -26,12 +33,10 @@ from bottle import run, error, get, post,\
 BaseRequest.MEMFILE_MAX = 1024*1024*1024
 
 #Sqlite Sqldb
-auser = sqlite3.connect('./data/auser.db')
-ausers = auser.cursor()
+user = sqlitei('./data/user.db')
 gum = sqlitei('./data/gum.db')
 
-ausers.execute("select salt from user where id=1")
-salt = ausers.fetchone()[-1]
+salt = user.select('user', ['salt'], {'id':1}).fetchone()[-1]
 '''
 #Session (bottle.ext.session
 session_opt = {
@@ -42,13 +47,14 @@ session_opt = {
 }
 apps = sessionm(app(), session_opt)
 '''
+
 def getmd5(key):
     hashs = md5()
     hashs.update(key)
     return hashs.hexdigest()
 
 def getoken():
-    token = getmd5(str(random()) + str(salt))
+    token = getmd5(unicode(random()) + unicode(salt))
     response.set_cookie('token', token, path='/home')
     return token
 
@@ -59,8 +65,8 @@ def validate(types):
     if types == 'login':
         login_key = request.get_cookie('key')
         if login_key:
-            ausers.execute("select cookie from user where id=1")
-            if login_key in ausers.fetchone():
+            cookies = user.select('user', ['cookie'], {'id':1}).fetchone()
+            if 'LOGOUT' not in cookies and login_key in cookies:
                 setheader()
                 return False
     elif types == 'token':
@@ -70,13 +76,13 @@ def validate(types):
             return False
     return True
 
-def b64ens(u):
+def b64ens(us):
     try:
-        return b64encode(u)
+        return b64encode(us)
     except UnicodeEncodeError:
-        return b64encode(u.encode('utf8'))
+        return b64encode(us.encode('utf8'))
     except TypeError:
-        return b64encode(unicode(u))
+        return b64encode(unicode(us))
 
 @get('/<filename:re:robots.txt>')
 @get('/<filename:re:favicon.ico>')
@@ -89,7 +95,6 @@ def send_static(filename):
 @error(405)
 @error(500)
 def errors(gumerror):
-#    setheader()
     return template('errors',
             error = gumerror.status[:3],
             ctime = ctime())
@@ -148,11 +153,10 @@ def login_rekey():
         key = filekey.file.read()
     elif urlkey:
         itime = strftime('%y%m%d%H', localtime(time()))
-        ttime = ausers.execute('select key from user where id=2').fetchone()
+        ttime = user.select('user', ['key'], {'id':2}).fetchone()
         if ttime and itime in ttime:
-            ausers.execute('updata user set key=? where id=2',
-                    [itime])
-            auser.commit()
+            user.update('user', {'key':itime}, {'id':2})
+            user.commit()
             redirect(referer)
         try:
             keyurl = urlparse(urlkey)
@@ -160,35 +164,33 @@ def login_rekey():
             httpkey.request('GET', keyurl.path)
             key = httpkey.getresponse().read()
         except Exception as e:
-            print unicode(e)
+            print(unicode(e))
             redirect(referer)
     else:
         redirect(referer)
-    ausers.execute("select key from user where id=1")
+    user.select('user', ['key'], {'id':1})
     keys = getmd5(b64encode(key) + salt)
-    akeys = ausers.fetchone()[0]
-    if keys != akeys:
+    ykeys = user.cs.fetchone()[0]
+    if keys != ykeys:
         if rekey:
-            ausers.execute("update user set key=? where id=1",
-                    [keys])
+            user.update('user', {'key':keys}, {'id':1})
         else:
             redirect(referer)
     else:
-        ausers.execute("select id,salt,key,cookie from user where id=1")
-        keyhash = getmd5(b64ens(ausers.fetchone()) + unicode(random()))
-        ausers.execute("update user set cookie=? where id=1", [keyhash])
+        user.select('user', ['id','salt','key','cookie'], {'id':1})
+        keyhash = getmd5(b64ens(user.cs.fetchone()) + unicode(random()))
+        user.update('user', {'cookie':keyhash}, {'id':1})
         response.set_cookie('key', keyhash, httponly = True,
                 max_age = 604800, path = '/home')
-    auser.commit()
+    user.commit()
     redirect('/home')
 
 @post('/home/logout')
 def logout():
     if validate('login') or validate('token'):
         abort(404)
-    ausers.execute("update user set cookie=? where id=1",
-            [None])
-    auser.commit()
+    user.update('user', {'cookie':'LOGOUT'}, {'id':1})
+    user.commit()
     redirect('/login')
 
 @get('/home')
@@ -377,10 +379,10 @@ def ing():
 #    updates = True if sessionid.get(referer) else False
     if server:
         try:
-            exec server
+            exec(server)
         except Exception as e:
-            print 'ConfigError: server code error.'
-            print unicode(e)
+            print('ConfigError: server code error.')
+            print(unicode(e))
             serverinfo['SERVER_CODE_ERROR'] = b64ens(e)
     if not updates:
 #        infoid = gums.execute("select id from info where upkey=?",
@@ -431,7 +433,7 @@ def cconnect(ws):
         try:
             cmdinfo = ws.receive().decode('utf8')
         except Exception as e:
-            print e
+            print(e)
             break
         if cmdinfo is not None:
             ur = unicode(ws)[-10:]
@@ -446,7 +448,7 @@ def cconnect(ws):
                     escape('No User, {error}'.format(error=e)))
             except WebSocketError as e:
                 consoles[idsalt].send(
-                    escape(ur + u' {error}'.format(error=e)))
+                    escape(ur + ' {error}'.format(error=e)))
         else: break
     ws.close()
 #    if lineor:
@@ -468,13 +470,13 @@ def main(host, port, debug):
 
 if __name__ == '__main__':
     if len(argv) <= 1 or ('-h' in argv) or ('--help' in argv):
-        print b64decode(b64encode('ChewinGum'))
-        print '''
+        print(b64decode(b64encode('ChewinGum')))
+        print('''
 usage:
 	python ./chewingum.py [ host port debug | -h ]
 
 	-h --help
-'''
+''')
     else:
         host = (argv[1] if argv[1] else '0.0.0.0') if len(argv) > 1 else '0.0.0.0'
         port = (argv[2] if argv[2] else '80') if len(argv) > 2 else '80'

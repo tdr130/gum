@@ -2,6 +2,14 @@
 # encoding: utf-8
 
 import sqlite3
+from sys import version_info
+
+if version_info >= (3, 0, 0):
+    def listkey(dicts):
+        return list(dicts.keys())[0]
+else:
+    def listkey(dicts):
+        return dicts.keys()[0]
 
 class sqlitei:
     '''Encapsulation sql.'''
@@ -20,7 +28,7 @@ class sqlitei:
         sql = 'select ' + columns + ' from ' + table
         dumps = []
         if dump:
-            dumpname = dump.keys()[0]
+            dumpname = listkey(dump)
             sql += ' where ' + dumpname + '=?'
             dumps.append(dump[dumpname])
         return self.cs.execute(sql, dumps)
@@ -33,7 +41,7 @@ class sqlitei:
         for c in column:
             columnx += c + '=?,'
             columns.append(column[c])
-        dumpname = dump.keys()[0]
+        dumpname = listkey(dump)
         sql = 'update ' + table + ' set '+ columnx[:-1] + ' where ' + dumpname + '=?'
         columns.append(dump[dumpname])
         return self.cs.execute(sql, columns)
@@ -49,6 +57,6 @@ class sqlitei:
     def delete(self, table, dump):
         '''Delete
         table str, dump dict'''
-        dumpname = dump.keys()[0]
+        dumpname = listkey(dump)
         sql = 'delete from ' + table + ' where ' + dumpname + '=?'
         return self.cs.execute(sql, [dump[dumpname]])
