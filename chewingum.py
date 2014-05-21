@@ -37,6 +37,7 @@ user = sqlitei('./data/user.db')
 gum = sqlitei('./data/gum.db')
 
 salt = user.select('user', ['salt'], {'id':1}).fetchone()[-1]
+
 '''
 #Session (bottle.ext.session
 session_opt = {
@@ -432,6 +433,9 @@ def cconnect(ws):
     while True:
         try:
             cmdinfo = ws.receive().decode('utf8')
+        except (UnicodeDecodeError, UnicodeEncodeError, TypeError) as e:
+            print(e)
+            cmdinfo = ws.receive()
         except Exception as e:
             print(e)
             break
