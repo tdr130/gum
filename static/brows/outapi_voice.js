@@ -3,7 +3,7 @@
         tool_voice - gum.js, Google tr api
                     - voice
                     gum_toolvoice = {'lang':'zh-CN', 'long':'39', 'q':'M哥好屌'};
-                    gum.script('http://'+gum.domain+'/static/brows/tool_voice.js');
+                    gum.script('http://'+gum.domain+'/static/brows/outapi_voice.js');
                         and
                     null
 */

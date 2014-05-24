@@ -104,7 +104,7 @@ gum = function(){
         };
     };
 
-    u.post = function(url, data, o, callback){
+    u.post = function(url, data, nj, callback){
         var form = u.addom("<form method='POST'>", u.html(), true);
         form.action = url;
         for(var name in data){
@@ -113,16 +113,18 @@ gum = function(){
             input.value = data[name];
             form.appendChild(input);
         };
-        if(!o){
+        if(!nj){
             var iframe = u.addom('<iframe sandbox name=_'+u.rdm()+'_>', u.html(), true);
             form.target = iframe.name;
         };
         callback&&u.bind(form, 'submit', callback);
         form.submit();
-        (!o)&&(u.kill(form))&(setTimeout(function(){
+        (!nj)&&(u.kill(form))&(setTimeout(function(){
             u.kill(iframe);
         }, 3*1000));
     };
 
     return u;
 }();
+
+{{!base}}

