@@ -1,6 +1,6 @@
 <html>
     <head>
-%include('static.tpl')
+%include('static.tpl', of=True)
     </head>
 	<body>
         <h3>{{uri}}</h3>

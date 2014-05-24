@@ -19,10 +19,13 @@
     <div class='content'>
         <h2 class='content-subhead'>Browser info</h2>
 %for info in browserinfo:
-    %if info.split('_')[0] == 'png':
+    %infoex = info.split('_')[0]
+    %if infoex == 'png':
         {{info}}:<img src='data:image/png;base64,{{browserinfo[info]}}'><br>
+    %elif infoex == 'html':
+        {{info}}:<iframe style='width:100%; height:175px' sandbox src='data:text/html;base64,{{browserinfo[info]}}'><br>
     %else:
-        {{info}}:<pre><code>{{b64decode(browserinfo[info])}}</code></pre>
+        {{info}}:<pre><code>{{b64decode(browserinfo[info])}}</code></pre><br>
     %end
 %end
     </div>

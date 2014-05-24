@@ -165,7 +165,7 @@ def login_rekey():
             httpkey.request('GET', keyurl.path)
             key = httpkey.getresponse().read()
         except Exception as e:
-            print(unicode(e))
+            print(e.message)
             redirect(referer)
     else:
         redirect(referer)
@@ -229,7 +229,7 @@ def set_project(ids):
     if upkey[0] == 'yes':
        gum.insert('project', ['upkey'], ['yes'])
     gum.commit()
-    redirect(request.headers.get('Referer'))
+    redirect('/home/project/' + ids)
 
 @get('/home/project/<ids:int>')
 def edit_project(ids):
@@ -284,7 +284,7 @@ def set_object(idsalt):
         'server':server
         },{'idsalt':idsalt})
     gum.commit()
-    redirect(request.headers.get('Referer'))
+    redirect('/home/object/' + idsalt)
 
 @get('/home/<ids:int>/info')
 def seeinfo(ids):
@@ -383,8 +383,8 @@ def ing():
             exec(server)
         except Exception as e:
             print('ConfigError: server code error.')
-            print(unicode(e))
-            serverinfo['SERVER_CODE_ERROR'] = b64ens(e)
+            print(e.message)
+            serverinfo['SERVER_CODE_ERROR'] = b64ens(e.message)
     if not updates:
 #        infoid = gums.execute("select id from info where upkey=?",
 #                ['yes']).fetchone()[0]
@@ -433,11 +433,12 @@ def cconnect(ws):
     while True:
         try:
             cmdinfo = ws.receive().decode('utf8')
-        except (UnicodeDecodeError, UnicodeEncodeError, TypeError) as e:
-            print(e)
+        except (UnicodeDecodeError, UnicodeEncodeError,
+                AttributeError, TypeError) as e:
+            print(e.message)
             cmdinfo = ws.receive()
         except Exception as e:
-            print(e)
+            print(e.message)
             break
         if cmdinfo is not None:
             ur = unicode(ws)[-10:]
@@ -449,10 +450,10 @@ def cconnect(ws):
                     consoles[idsalt].send(ur + escape(cmdinfo))
             except KeyError as e:
                 consoles[idsalt].send(
-                    escape('No User, {error}'.format(error=e)))
+                    escape('No User, {error}'.format(error=e.message)))
             except WebSocketError as e:
                 consoles[idsalt].send(
-                    escape(ur + ' {error}'.format(error=e)))
+                    escape(ur + ' {error}'.format(error=e.message)))
         else: break
     ws.close()
 #    if lineor:

@@ -27,8 +27,8 @@ def install(salt, filekey):
 		cookie
 	);
 ''')
-    ausers.execute('insert into user (id, salt, key) values (?,?,?)',
-            [1, salt, key])
+    ausers.execute('insert into user (id, salt, key, cookie) values (?,?,?,?)',
+            [1, salt, key, 'LOGOUT'])
     ausers.execute('insert into user (id, key) values (?,?)',
             [2, time()])
     auser.commit()
