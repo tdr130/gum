@@ -258,7 +258,7 @@ def edit_object(idsalt):
         abort(404)
     infos = gum.select('info', ['id'], {'idsalt':idsalt}).fetchall()
     return template('setting.tpl',
-            id = objects[1],
+            id = idsalt,
             title='Object',
             name = objects[1],
             browser = objects[2] if objects[2] else '',
