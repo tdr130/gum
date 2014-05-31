@@ -13,7 +13,9 @@ from hashlib import md5
 #from os import listdir, remove
 from data.libdbs import sqlitei
 from time import time, ctime, strftime, localtime
-from bottle.ext.websocket import websocket, GeventWebSocketServer
+if not ifpy3:
+    from bottle.ext.websocket import websocket, GeventWebSocketServer
+    from geventwebsocket import WebSocketError
 #from beaker.middleware import SessionMiddleware as sessionm
 if ifpy3:
     unicode = str
@@ -22,7 +24,7 @@ if ifpy3:
 else:
     from urlparse import urlparse
     from httplib import HTTPConnection as httpconn
-from geventwebsocket import WebSocketError
+
 from base64 import b64encode, b64decode
 from json import dumps, loads
 from random import random
@@ -165,7 +167,7 @@ def login_rekey():
             httpkey.request('GET', keyurl.path)
             key = httpkey.getresponse().read()
         except Exception as e:
-            print(e.message)
+            print(unicode(e))
             redirect(referer)
     else:
         redirect(referer)
@@ -383,7 +385,7 @@ def ing():
             exec(server)
         except Exception as e:
             print('ConfigError: server code error.')
-            print(e.message)
+            print(unicode(e))
             serverinfo['SERVER_CODE_ERROR'] = b64ens(e.message)
     if not updates:
 #        infoid = gums.execute("select id from info where upkey=?",
@@ -433,12 +435,11 @@ def cconnect(ws):
     while True:
         try:
             cmdinfo = ws.receive().decode('utf8')
-        except (UnicodeDecodeError, UnicodeEncodeError,
-                AttributeError, TypeError) as e:
-            print(e.message)
-            cmdinfo = ws.receive()
+        except WebSocketError as e:
+            print(unicode(e))
+            break
         except Exception as e:
-            print(e.message)
+            print(unicode(e))
             break
         if cmdinfo is not None:
             ur = unicode(ws)[-10:]
@@ -450,16 +451,16 @@ def cconnect(ws):
                     consoles[idsalt].send(ur + escape(cmdinfo))
             except KeyError as e:
                 consoles[idsalt].send(
-                    escape('No User, {error}'.format(error=e.message)))
+                    escape('No User, {error}'.format(error=unicode(e))))
             except WebSocketError as e:
                 consoles[idsalt].send(
-                    escape(ur + ' {error}'.format(error=e.message)))
+                    escape(ur + ' {error}'.format(error=unicode(e))))
         else: break
     ws.close()
-#    if lineor:
-#        del consoles[idsalt]
-#    else:
-#        del victims[idsalt]
+    if lineor and idsalt and idsalt in consoles:
+            del consoles[idsalt]
+    elif idsalt and idsalt in victims:
+        del victims[idsalt]
 
 @get('/home/console')
 def console():
@@ -470,8 +471,10 @@ def console():
             title='Console')
 
 def main(host, port, debug):
-#    run(host=host, port=port, debug=debug)#, app=apps)
-    run(host=host, port=port, debug=debug, server=GeventWebSocketServer)
+    if ifpy3:
+        run(host=host, port=port, debug=debug)#, app=apps)
+    else:
+        run(host=host, port=port, debug=debug, server=GeventWebSocketServer)
 
 if __name__ == '__main__':
     if len(argv) <= 1 or ('-h' in argv) or ('--help' in argv):
