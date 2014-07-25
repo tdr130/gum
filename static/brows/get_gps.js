@@ -6,14 +6,14 @@
             //setTimeout(function(){
             //    gum.post('http://' + gum.domain + '/ing', gum.backinfo);
             //    gum.backinfo = {};
-            //}, 10*1000);
+            //}, 7*1000);
                 and
             null
-
 */
 (function(gps){
     if(!gps){
-        gum.backinfo['gps'] = 'Not supported navigator.geolocation!'
+        gum.backinfo['gps'] = 'Not supported navigator.geolocation!';
+        return;
     };
     gps.getCurrentPosition(function(e){
         var coord = e.coords;

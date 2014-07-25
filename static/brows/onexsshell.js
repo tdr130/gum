@@ -5,7 +5,6 @@
             gum.script('http://' + gum.domain + '/static/brows/onexsshell.js')
         and
             console
-
 */
 
 if(!window.WebSocket){

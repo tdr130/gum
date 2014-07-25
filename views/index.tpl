@@ -1,3 +1,3 @@
-%rebase('gum.js', domain=domain)
+%include('gum.js', domain=domain)
 
 {{!script}}

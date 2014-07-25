@@ -1,31 +1,21 @@
 gum = function(){
     var u = {
-        'version':'1140524',
+        'version':'1140613',
         'domain':'{{domain}}',
         'backinfo':{}
     };
 
-    u.e = function(code){try{return eval(code)}catch(e){return ''}};
-
-    u.jquery = function(){
-        if(u.e('$().jquery')){return 1}else{return 0};
-    };
-
-    u.id = function(id){
-        return document.getElementById(id);
-    };
-
-    u.name = function(name){
-        return document.getElementsByTagName(name);
-    };
+    u.e = function(code){try{return eval('('+code+')')}catch(e){return ''}};
+    u.jquery = function(){if(u.e('$().jquery')){return 1}else{return 0}};
+    u.id = function(id){return document.getElementById(id)};
+    u.name = function(name){return document.getElementsByTagName(name)};
+    u.rdm = function(){return Math.random()*1e5};
 
     u.html = function(){
         return u.name('html')[0]
             ||document.write('<html>')
                 ||u.name('html')[0];
     };
-
-    u.rdm = function(){return Math.random()*1e5};
 
     u.bind = function(e, name, foo){
         if(u.jquery()){
@@ -34,6 +24,20 @@ gum = function(){
             (e.addEventListener)?(
                 e.addEventListener(name, foo, false)):(
                 e.attachEvent('on'+name, foo));
+        };
+    };
+
+    u.ready = function(foo){
+        if (document.onDOMContentLoaded){
+            u.bind(document, 'DOMContentLoaded', foo);
+        }else{
+            var r = setInterval(function(){
+                try{
+                    document.body.doScroll('left');
+                    clearInterval(r);
+                    foo();
+                }catch(e){};
+            }, 5);
         };
     };
 
@@ -70,7 +74,7 @@ gum = function(){
 
     u.ajax = function(url, datas, headers, callback){
         var xhr;
-        datas?(type = 'POST'):(type = 'GET');
+        var type = datas?('POST'):('GET');
         if(u.jquery()){
             xhr = $.ajax({
                 type:type,
@@ -126,5 +130,3 @@ gum = function(){
 
     return u;
 }();
-
-{{!base}}
