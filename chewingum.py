@@ -231,7 +231,7 @@ def set_project(ids):
     if upkey[0] == 'yes':
        gum.insert('project', ['upkey'], ['yes'])
     gum.commit()
-    redirect('/home/project/' + ids)
+    redirect('/home/project/' + str(ids))
 
 @get('/home/project/<ids:int>')
 def edit_project(ids):
