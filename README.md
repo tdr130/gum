@@ -27,8 +27,8 @@ Plugins
 
 Demo
 ----
-![XSS Shell](http://quininer.github.io/upload/xsshell_1.png)
-![XSS Shell](http://quininer.github.io/upload/xsshell_2.png)
+![XSS Shell](http://quininer.github.io/gum/images/xsshell_1.png)
+![XSS Shell](http://quininer.github.io/gum/images/xsshell_2.png)
 
 Thank
 -----
