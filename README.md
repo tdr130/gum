@@ -40,8 +40,8 @@ Over
 差不多达到可用状态，因为没人陪我玩- -
 热情消耗殆尽，如果没有什么情况，应当不会再更新。  
 Gum.js及其小工具会独立维护，  
-* [Gum.js](http://quininer.github.io/gum.js)
-* [Gum_Tools](http://github.com/quininer/quininer.github.io/tree/master/gum_tools/)
+* [Gum.js](http://quininer.github.io/tests/gum.js)
+* [Gum_Tools](https://github.com/quininer/gum/tree/gh-pages/gum_tools)
 
 Lincense (GPLv3)
 ----------------
